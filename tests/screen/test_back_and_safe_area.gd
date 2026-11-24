@@ -79,3 +79,16 @@ func test_layout_inside_safe_rect() -> void:
 			assert_gte((parts.board as Control).size.x, 560.0)
 		screen.get_parent().remove_child(screen)
 		screen.free()
+
+
+func test_sheets_stay_inside_safe_area() -> void:
+	_saved_game()
+	var safe := Rect2(0, 100, 720, 1100)
+	var screen := _phone(Vector2i(720, 1280), safe)
+	await wait_process_frames(2)
+	_press_settings(screen)
+	await wait_process_frames(3)
+	var panel := _open_sheet_of(screen).panel().get_global_rect()
+	assert_true(safe.encloses(panel), str(panel))
+	screen.get_parent().remove_child(screen)
+	screen.free()

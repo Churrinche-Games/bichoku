@@ -105,3 +105,23 @@ func test_saved_sound_settings_apply_on_start() -> void:
 	_saved_game()
 	GameStore.new(PATH).set_setting("effects", false)
 	assert_false(_screen().sound.effects_on)
+
+
+func test_every_sheet_settles_in_both_languages() -> void:
+	_saved_game()
+	for code in ["es", "en"]:
+		GameStore.new(PATH).set_setting("language", code)
+		var screen := _screen()
+		await wait_process_frames(2)
+		for open: Callable in [
+			func() -> void: (screen.layout_parts().header.get_child(1) as Button).pressed.emit(),
+			func() -> void: _press_settings(screen),
+		]:
+			open.call()
+			await wait_process_frames(3)
+			var sheet := _open_sheet_of(screen)
+			var rect := sheet.panel().get_rect()
+			await wait_process_frames(2)
+			assert_eq(sheet.panel().get_rect(), rect, "%s settles" % code)
+			sheet.close()
+		screen.free()

@@ -361,12 +361,20 @@ func _tool(text: String, on_press: Callable) -> Button:
 	return b
 
 
-func _layout() -> void:
+## The device safe area in the screen's coordinates (or the test's override).
+func _safe_area() -> Rect2:
 	var area := Rect2(Vector2.ZERO, size)
 	if safe_rect_override.has_area():
-		area = safe_rect_override
-	elif is_inside_tree():
-		area = KitMobile.current_safe_rect(get_viewport()).intersection(area)
+		return safe_rect_override
+	if is_inside_tree():
+		return KitMobile.current_safe_rect(get_viewport()).intersection(area)
+	return area
+
+
+func _layout() -> void:
+	var area := _safe_area()
+	if _sheet != null:
+		_sheet.area_rect = area
 	var view := area.size
 	var column := BoardLayout.column_width(view)
 	var side := minf(BoardLayout.board_side(view, CHROME), column - PAD * 2)
@@ -418,6 +426,7 @@ func _open_sheet() -> KitSheet:
 	if _sheet != null:
 		_sheet.close()
 	_sheet = KitSheet.new()
+	_sheet.area_rect = _safe_area()
 	_sheet.closed.connect(func() -> void: _sheet = null)
 	add_child(_sheet)
 	return _sheet
