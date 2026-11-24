@@ -115,6 +115,16 @@ One portrait column (viewport 720×1280, stretch `canvas_items`, aspect `expand`
 - **Help (?)** explains the rules and the controls. **Settings (⚙)** holds the settings above plus entries for About, Feedback and (itch build only) Support.
 - Android back button closes an open dialog, else asks before leaving. The game pauses (clock stops) when the app goes to the background.
 
+## Screen sizes
+
+- Base canvas 720×1280 portrait, stretch `canvas_items`, aspect `expand`: everything scales with the screen and there are never black bars; extra space goes to the longer side. Android is locked to portrait.
+- **The board is square and as large as fits:** its side is the smaller of the column width and the height left after the header, palette and tools.
+- **Tall phones** (19.5:9, 20:9): the extra height is shared above and below the board; nothing stretches.
+- **Wide or short screens** (16:9 phones, tablets, open foldables, the web build in a landscape browser window): the column is at most 720 units wide and centred.
+- **Safe area:** content stays inside the device's safe area (notches, camera holes, gesture bar), via the kit's mobile module.
+- **Touch:** a cell is about 38 dp on a 360 dp phone (same as the web version); palette and tool buttons are at least 48 dp.
+- **Check:** a test lays the screen out at 720×1280, 1080×2400, a 4:3 tablet and a 16:9 landscape window and checks that nothing overlaps or leaves the visible area. Screenshots at those sizes are part of the release candidate.
+
 ## Kit modules built along the way
 
 Written in `~/src/game-kit` (generic, tested there), tagged, synced here. Only what Bichoku uses:
@@ -156,4 +166,5 @@ The portfolio's release process, in order: signed AAB with Play App Signing; web
 - **2026-11-24 Art reviews:** two checkpoints, shapes first, then inks and full drawings; penguin and hornero shown finished from the start.
 - **2026-11-24 Language:** follows the device on first launch (Spanish or English); settings override.
 - **2026-11-24 Sound settings:** music and effects toggles in the settings menu.
+- **2026-11-24 Screen sizes:** portrait column, square board as large as fits, centred column on wide screens (see Screen sizes).
 - **2026-11-24 Release split:** the plan ends at a release candidate; account steps go through `release-game` with Juan (proposed, see Store and release).
