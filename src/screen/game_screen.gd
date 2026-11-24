@@ -27,6 +27,10 @@ var store_path := "user://bichoku.json"
 var info_path := KitGameInfo.PATH
 ## The build's store (KitGameInfo.store()) unless a test sets it.
 var store_override := &""
+## The screen lays out inside the device's safe area; tests set this to pretend a notch.
+var safe_rect_override := Rect2()
+## What leaving does after the back button and "Leave" (tests replace it).
+var quit_handler: Callable
 var state: GameState
 var board: BoardView
 ## Effects and music (sounds arrive with the art and sound plan); switches come from settings.
@@ -63,6 +67,8 @@ var _hint: Button
 
 func _ready() -> void:
 	theme = KitTheme.make(PALETTE)
+	if not quit_handler.is_valid():
+		quit_handler = get_tree().quit
 	_store = GameStore.new(store_path)
 	_settings = _store.settings()
 	_language = KitLanguage.apply(_settings.language)
@@ -100,6 +106,8 @@ func _notification(what: int) -> void:
 			_focused = true
 		NOTIFICATION_WM_CLOSE_REQUEST:
 			_save()
+		NOTIFICATION_WM_GO_BACK_REQUEST:
+			_on_back()
 
 
 ## One second of play. Called by the timer; the clock stops while the app is in the background.
@@ -354,10 +362,15 @@ func _tool(text: String, on_press: Callable) -> Button:
 
 
 func _layout() -> void:
-	var view := size
+	var area := Rect2(Vector2.ZERO, size)
+	if safe_rect_override.has_area():
+		area = safe_rect_override
+	elif is_inside_tree():
+		area = KitMobile.current_safe_rect(get_viewport()).intersection(area)
+	var view := area.size
 	var column := BoardLayout.column_width(view)
 	var side := minf(BoardLayout.board_side(view, CHROME), column - PAD * 2)
-	_column.position = Vector2(BoardLayout.column_left(view) + PAD, 0)
+	_column.position = area.position + Vector2(BoardLayout.column_left(view) + PAD, 0)
 	_column.size = Vector2(column - PAD * 2, view.y)
 	board.custom_minimum_size = Vector2(side, side)
 	board.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -408,6 +421,23 @@ func _open_sheet() -> KitSheet:
 	_sheet.closed.connect(func() -> void: _sheet = null)
 	add_child(_sheet)
 	return _sheet
+
+
+## Android back: closes the open sheet, else asks before leaving.
+func _on_back() -> void:
+	if _sheet != null:
+		_sheet.close()
+		return
+	var sheet := _open_sheet()
+	sheet.add_title(tr("KIT_LEAVE_TITLE") % tr("TITLE"))
+	sheet.add_text(tr("KIT_LEAVE_TEXT"))
+	sheet.add_button(tr("KIT_LEAVE_YES"), _leave)
+	sheet.add_button(tr("KIT_CANCEL"))
+
+
+func _leave() -> void:
+	_save()
+	quit_handler.call()
 
 
 func _show_help() -> void:
