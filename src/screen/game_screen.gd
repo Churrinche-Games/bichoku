@@ -29,6 +29,8 @@ var info_path := KitGameInfo.PATH
 var store_override := &""
 var state: GameState
 var board: BoardView
+## Effects and music (sounds arrive with the art and sound plan); switches come from settings.
+var sound: KitSound
 
 var _store: GameStore
 var _source: PuzzleSource
@@ -64,6 +66,9 @@ func _ready() -> void:
 	_store = GameStore.new(store_path)
 	_settings = _store.settings()
 	_language = KitLanguage.apply(_settings.language)
+	sound = KitSound.new()
+	add_child(sound)
+	_apply_sound()
 	_source = PuzzleSource.new()
 	_source.ready.connect(_on_source_ready)
 	_build()
@@ -417,6 +422,8 @@ func _show_settings() -> void:
 	sheet.add_title(tr("SETTINGS_TITLE"))
 	for key in ["animals_left", "mark_clashes", "show_numbers"]:
 		sheet.add_check(tr("SETTING_" + key.to_upper()), _settings[key], _change_setting.bind(key))
+	sheet.add_check(tr("KIT_MUSIC"), _settings.music, _change_setting.bind("music"))
+	sheet.add_check(tr("KIT_EFFECTS"), _settings.effects, _change_setting.bind("effects"))
 	sheet.add_text(tr("KIT_LANGUAGE"))
 	var languages: Array[Dictionary] = []
 	for code: String in KitLanguage.SUPPORTED:
@@ -454,7 +461,13 @@ func _change_language(code: String) -> void:
 func _change_setting(value: bool, key: String) -> void:
 	_store.set_setting(key, value)
 	_settings = _store.settings()
+	_apply_sound()
 	_refresh()
+
+
+func _apply_sound() -> void:
+	sound.music_on = _settings.music
+	sound.effects_on = _settings.effects
 
 
 func _show_win(new_best: bool) -> void:
