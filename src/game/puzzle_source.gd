@@ -69,8 +69,11 @@ func _generate(difficulty: StringName, seed: int) -> void:
 	_mutex.lock()
 	_games[difficulty] = game
 	_mutex.unlock()
-	_announce.call_deferred(difficulty)
+	# Deferred to the main thread through a weak reference: the source may be gone by then.
+	PuzzleSource._deliver.call_deferred(weakref(self), difficulty)
 
 
-func _announce(difficulty: StringName) -> void:
-	ready.emit(difficulty)
+static func _deliver(source_ref: WeakRef, difficulty: StringName) -> void:
+	var source: PuzzleSource = source_ref.get_ref()
+	if source != null:
+		source.ready.emit(difficulty)
