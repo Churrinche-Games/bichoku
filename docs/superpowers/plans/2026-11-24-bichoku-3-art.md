@@ -55,3 +55,20 @@
 ### Task B3: checkpoint 1
 
 - Screenshots of the game (720×1280, es) with a mid-game board, and the contact sheet rendered to PNG. Present to Juan; **stop** until the shapes are approved.
+
+---
+
+## Part 2: checkpoint 2 (shapes approved by Juan, 2026-11-24)
+
+### Task C1: full drawings for all nine
+
+- `FULL_APPROVED` becomes all nine ids; `test_full_only_for_approved` → `test_every_animal_has_full`.
+- Detail strokes scale with the level (the deferred review minor): strokes passed to `dr.path` with a fixed `stroke-width` use `× dr.L.ln` (or `dr.line`/`dr.outline`), so the simple level keeps the penguin's feet, beak and stripe, the hornero's brow and the jaguar's muzzle and chest visible.
+- `*-full.svg` import at `svg/scale=3` (win picture sharp on 2–3× phones); `test_full_textures_are_large` (width ≥ 600).
+- Review the full level at 160 px for every animal; fix what only shows at full detail.
+
+### Task C2: checkpoint 2 images (no ink or givens change committed before Juan decides)
+
+- **Inks:** the board with the current inks and with a proposal that separates the two browns (lobo marino darker and cooler, guanaco warmer); a contact sheet of both.
+- **Givens vs entered:** two treatments on the same board — A: size (givens 84%, entered 70%, today); B: same size, givens on a shaded cell. Each with a clash, a selection and notes.
+- Juan picks; the choice becomes Task C3 (inks in `animals.gd`, `animals.mjs` and the spec's table; the givens treatment in `BoardView` with a test).
