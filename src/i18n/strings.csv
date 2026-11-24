@@ -1,0 +1,58 @@
+keys,es,en
+TITLE,Bichoku,Bichoku
+DIFF_EASY,Fácil,Easy
+DIFF_MEDIUM,Medio,Medium
+DIFF_HARD,Difícil,Hard
+HINTS_LEFT,Pistas: %d,Hints: %d
+TOOL_UNDO,Deshacer,Undo
+TOOL_ERASE,Borrar,Erase
+TOOL_NOTES,Notas,Notes
+TOOL_HINT,Pista,Hint
+PREPARING,Preparando el juego…,Preparing the game…
+CONFIRM_NEW_TITLE,¿Empezar otro juego?,Start a new game?
+CONFIRM_NEW_TEXT,Vas a perder el juego que tenés empezado.,You'll lose the game in progress.
+CONFIRM_NEW_YES,Empezar,Start
+CANCEL,Cancelar,Cancel
+CLOSE,Cerrar,Close
+NEW_GAME,Nuevo juego,New game
+WIN_TITLE,¡Resuelto!,Solved!
+WIN_TIME,Tiempo: %s,Time: %s
+WIN_BEST,Mejor tiempo: %s,Best time: %s
+WIN_NEW_BEST,¡Nuevo récord!,New best time!
+WIN_HINTS_NOTE,Los mejores tiempos solo cuentan los juegos resueltos sin pistas.,Best times only count games solved without hints.
+SETTINGS_TITLE,Ajustes,Settings
+SETTING_ANIMALS_LEFT,Mostrar cuántos animales faltan,Show animals left
+SETTING_MARK_CLASHES,Marcar repetidos,Mark clashes
+SETTING_SHOW_NUMBERS,Mostrar números,Show numbers
+HELP_TITLE,Cómo se juega,How to play
+HELP_TEXT,"Cada fila, cada columna y cada caja de 3×3 tienen que tener los nueve animales, sin repetir.
+
+Tocá una casilla y después un animal para ponerlo. Con Notas activado, tocá animales para anotar las opciones posibles.
+
+Si un animal se repite, se marca con un círculo rojo. Las pistas son pocas: 3 en Fácil, 2 en Medio y 1 en Difícil. Los mejores tiempos solo cuentan los juegos sin pistas.
+
+En una computadora: 1 a 9, flechas, Borrar, N (notas), U o Ctrl+Z (deshacer), H (pista).","Every row, every column and every 3×3 box must hold all nine animals, with no repeats.
+
+Tap a cell, then an animal to place it. With Notes on, tap animals to jot down the possible options.
+
+If an animal repeats, it gets a red ring. Hints are few: 3 on Easy, 2 on Medium and 1 on Hard. Best times only count games solved without hints.
+
+On a computer: 1 to 9, arrows, Backspace, N (notes), U or Ctrl+Z (undo), H (hint)."
+ANIMAL_YAGUARETE_NAME,Yaguareté,Jaguar
+ANIMAL_YAGUARETE_FACT,El felino más grande de América. En la Argentina sobrevive sobre todo en la selva de Misiones.,The largest cat of the Americas. In Argentina it survives mostly in the Misiones rainforest.
+ANIMAL_LOBO_MARINO_NAME,Lobo marino,South American sea lion
+ANIMAL_LOBO_MARINO_FACT,"Forma grandes colonias en las playas de Península Valdés y Puerto Madryn, en Chubut.","It gathers in big colonies on the beaches of Península Valdés and Puerto Madryn, in Chubut."
+ANIMAL_PINGUINO_NAME,Pingüino de Magallanes,Magellanic penguin
+ANIMAL_PINGUINO_FACT,"Cada año anidan cientos de miles en Punta Tombo, Chubut.","Hundreds of thousands nest every year at Punta Tombo, Chubut."
+ANIMAL_CONDOR_NAME,Cóndor andino,Andean condor
+ANIMAL_CONDOR_FACT,"Una de las aves voladoras más grandes: con las alas abiertas mide más de tres metros.","One of the largest flying birds, with a wingspan of over three metres."
+ANIMAL_HORNERO_NAME,Hornero,Rufous hornero
+ANIMAL_HORNERO_FACT,Es el ave nacional de la Argentina. Construye su nido de barro con forma de horno.,Argentina's national bird. It builds an oven-shaped nest out of mud.
+ANIMAL_YACARE_NAME,Yacaré,Caiman
+ANIMAL_YACARE_FACT,"Vive en los humedales de los Esteros del Iberá, en Corrientes.","Lives in the wetlands of the Esteros del Iberá, in Corrientes."
+ANIMAL_FLAMENCO_NAME,Flamenco austral,Chilean flamingo
+ANIMAL_FLAMENCO_FACT,Su color rosado viene de los pequeños crustáceos que filtra en las lagunas saladas.,Its pink color comes from the small crustaceans it filters from salt lakes.
+ANIMAL_GUANACO_NAME,Guanaco,Guanaco
+ANIMAL_GUANACO_FACT,Un pariente salvaje de la llama que recorre la Patagonia y los Andes.,A wild relative of the llama that roams Patagonia and the Andes.
+ANIMAL_BALLENA_NAME,Ballena franca austral,Southern right whale
+ANIMAL_BALLENA_FACT,Llega a Península Valdés cada invierno para tener sus crías.,Comes to Península Valdés every winter to have its calves.

@@ -21,3 +21,8 @@ window/handheld/orientation=1
 
 renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://src/i18n/strings.es.translation", "res://src/i18n/strings.en.translation")
+locale/fallback="en"
