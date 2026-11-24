@@ -14,6 +14,8 @@ var _mutex := Mutex.new()
 var _tasks := {}
 ## difficulty -> GameState ready to play (written by the worker).
 var _games := {}
+## Difficulties waiting for their deferred generation (builds without threads).
+var _deferred := {}
 
 
 func _init(
@@ -32,13 +34,15 @@ func _notification(what: int) -> void:
 
 ## Starts generating one game for the difficulty, unless one is ready or on its way.
 func prepare(difficulty: StringName) -> void:
-	if _tasks.has(difficulty) or _has_game(difficulty):
+	if _tasks.has(difficulty) or _deferred.has(difficulty) or _has_game(difficulty):
 		return
 	var seed: int = _seed_source.call() if _seed_source.is_valid() else randi()
 	if _use_threads:
 		_tasks[difficulty] = WorkerThreadPool.add_task(_generate.bind(difficulty, seed))
 	else:
-		_generate(difficulty, seed)
+		# Without threads, generate on a later frame so the tap that asked for it isn't held up.
+		_deferred[difficulty] = true
+		PuzzleSource._generate_later.call_deferred(weakref(self), difficulty, seed)
 
 
 ## The ready game, or null when it isn't ready yet. Either way the next one is prepared.
@@ -70,6 +74,13 @@ func _finish_task(difficulty: StringName) -> void:
 	if _tasks.has(difficulty):
 		WorkerThreadPool.wait_for_task_completion(_tasks[difficulty])
 		_tasks.erase(difficulty)
+
+
+static func _generate_later(source_ref: WeakRef, difficulty: StringName, seed: int) -> void:
+	var source: PuzzleSource = source_ref.get_ref()
+	if source != null:
+		source._deferred.erase(difficulty)
+		source._generate(difficulty, seed)
 
 
 func _generate(difficulty: StringName, seed: int) -> void:

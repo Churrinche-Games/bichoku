@@ -124,3 +124,41 @@ func test_buttons_are_big_enough_to_tap() -> void:
 				assert_gte(b.size.x, 64.0, "%s button '%s' width" % [part, b.text])
 	viewport.remove_child(screen)
 	screen.free()
+
+
+func _key(keycode: Key) -> InputEventKey:
+	var e := InputEventKey.new()
+	e.keycode = keycode
+	e.pressed = true
+	return e
+
+
+func test_arrows_move_the_selection_after_tapping_a_button() -> void:
+	var saved := _saved_game()
+	var screen := _screen()
+	screen.board.cell_pressed.emit(40)
+	for part: String in ["header", "tabs", "palette", "tools"]:
+		for child in (screen.layout_parts()[part] as Control).get_children():
+			if child is Button:
+				assert_eq(
+					(child as Button).focus_mode, Control.FOCUS_NONE, "%s takes no focus" % part
+				)
+	screen.get_viewport().push_input(_key(KEY_RIGHT))
+	assert_eq(screen.state.selected, 41)
+	var hints_before: int = screen.state.hints_used
+	screen.get_viewport().push_input(_key(KEY_SPACE))
+	assert_eq(screen.state.hints_used, hints_before, "space doesn't press a game button")
+	assert_eq(saved.puzzle, screen.state.puzzle)
+
+
+func test_tabs_show_the_current_difficulty_after_asking() -> void:
+	var saved := _saved_game()
+	var screen := _screen()
+	screen.board.cell_pressed.emit(_first_empty(saved))
+	screen.palette_button(1).pressed.emit()
+	var hard := screen.tab_button(Difficulty.HARD)
+	hard.button_pressed = true  # what a click does to a toggle button before 'pressed'
+	hard.pressed.emit()
+	assert_true(screen.is_confirm_open())
+	assert_false(hard.button_pressed, "hard not lit while asking")
+	assert_true(screen.tab_button(Difficulty.EASY).button_pressed)

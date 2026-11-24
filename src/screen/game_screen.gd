@@ -101,6 +101,10 @@ func palette_button(digit: int) -> Button:
 	return _palette_buttons[digit - 1]
 
 
+func tab_button(difficulty: StringName) -> Button:
+	return _tab_buttons[difficulty]
+
+
 func layout_parts() -> Dictionary:
 	return {
 		"header": _header,
@@ -122,6 +126,8 @@ func is_confirm_open() -> bool:
 
 ## Starts a new game of that difficulty, asking first if it would throw away a game in progress.
 func request_new_game(difficulty: StringName) -> void:
+	# A click has already toggled the tab; show the current difficulty until a new game starts.
+	_refresh()
 	if state != null and GameStore.needs_confirm_to_discard(state):
 		_confirm_open = true
 		var sheet := _open_sheet()
@@ -302,6 +308,8 @@ func _row(height: float) -> HBoxContainer:
 func _button(text: String, on_press: Callable, min_width: float = 0.0) -> Button:
 	var b := Button.new()
 	b.text = text
+	# The game's buttons never take keyboard focus: arrows, Space and Enter belong to the board.
+	b.focus_mode = Control.FOCUS_NONE
 	b.custom_minimum_size = Vector2(min_width, 0)
 	b.pressed.connect(on_press)
 	return b

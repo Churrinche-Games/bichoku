@@ -56,10 +56,10 @@ func test_prepare_twice_starts_one_job() -> void:
 	assert_eq(_next_seed, 101, "one seed used")
 
 
-func test_without_threads_generates_right_away() -> void:
+func test_without_threads_generation_waits_for_the_next_frame() -> void:
 	_next_seed = 100
 	var source := PuzzleSource.new(_seeds, false)
 	source.prepare(Difficulty.EASY)
-	var game := source.take(Difficulty.EASY)
-	assert_not_null(game, "ready without waiting")
-	assert_eq(game.seed, 101)
+	assert_null(source.take(Difficulty.EASY), "not generated inside the call")
+	await wait_process_frames(2)
+	assert_not_null(source.take(Difficulty.EASY))
