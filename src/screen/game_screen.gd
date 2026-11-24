@@ -23,6 +23,10 @@ const CHROME := HEADER_H + TABS_H + META_H + BUTTON_H * 2 + GAP * 5 + 48.0
 const SAVE_EVERY_TICKS := 10
 
 var store_path := "user://bichoku.json"
+## Where the About, Feedback and Support pages read the game's facts (tests point elsewhere).
+var info_path := KitGameInfo.PATH
+## The build's store (KitGameInfo.store()) unless a test sets it.
+var store_override := &""
 var state: GameState
 var board: BoardView
 
@@ -418,7 +422,23 @@ func _show_settings() -> void:
 	for code: String in KitLanguage.SUPPORTED:
 		languages.append({"text": KitLanguage.display_name(code), "value": code})
 	sheet.add_choice(languages, _language, _change_language)
+	var info := KitGameInfo.from_file(info_path)
+	var store := store_override if store_override else KitGameInfo.store()
+	sheet.add_button(tr("KIT_ABOUT"), _show_about.bind(info))
+	if KitPages.has_feedback(info):
+		sheet.add_button(tr("KIT_FEEDBACK"), _show_page.bind(KitPages.feedback.bind(info)))
+	if KitPages.has_support(info, store):
+		sheet.add_button(tr("KIT_SUPPORT"), _show_page.bind(KitPages.support.bind(info, store)))
 	sheet.add_button(tr("KIT_CLOSE"))
+
+
+func _show_about(info: KitGameInfo) -> void:
+	KitPages.about(_open_sheet(), info, _show_page.bind(KitPages.licenses))
+
+
+## Opens a sheet and lets fill(sheet) put a kit page in it.
+func _show_page(fill: Callable) -> void:
+	fill.call(_open_sheet())
 
 
 func _change_language(code: String) -> void:

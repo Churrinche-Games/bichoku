@@ -224,3 +224,52 @@ func test_switching_language_keeps_the_game() -> void:
 	assert_not_null(reopened)
 	assert_not_null(_button_in(reopened, "English"))
 	assert_eq(GameStore.new(PATH).settings().language, "es")
+
+
+func _texts(node: Node) -> Array[String]:
+	var out: Array[String] = []
+	for child in node.find_children("*", "", true, false):
+		if child is Label or child is Button:
+			out.append(child.text)
+	return out
+
+
+func test_about_opens_with_version() -> void:
+	_saved_game()
+	var screen := _screen()
+	_button_in(_press_settings(screen), "About").pressed.emit()
+	var about := _open_sheet_of(screen)
+	assert_has(_texts(about), "Version 0.1.0")
+	assert_has(_texts(about), "Bichoku")
+	_button_in(about, "Third-party licenses").pressed.emit()
+	assert_string_contains(" ".join(_texts(_open_sheet_of(screen))), "Godot Engine")
+
+
+func test_no_donation_words_in_play_settings() -> void:
+	_saved_game()
+	for code in ["es", "en"]:
+		GameStore.new(PATH).set_setting("language", code)
+		var screen := _screen()
+		screen.info_path = "res://tests/screen/game_info_itch.cfg"
+		var all := " ".join(_texts(_press_settings(screen))).to_lower()
+		for word in ["donat", "donac", "apoy", "support", "ko-fi", "cafecito"]:
+			assert_false(all.contains(word), "%s: %s" % [code, word])
+		screen.free()
+
+
+func test_support_shown_for_itch_with_links() -> void:
+	_saved_game()
+	var screen := _screen()
+	screen.info_path = "res://tests/screen/game_info_itch.cfg"
+	screen.store_override = &"itch"
+	_button_in(_press_settings(screen), "Support").pressed.emit()
+	assert_not_null(_button_in(_open_sheet_of(screen), "Ko-fi"))
+
+
+func test_feedback_shows_issues_link() -> void:
+	_saved_game()
+	var screen := _screen()
+	_button_in(_press_settings(screen), "Feedback").pressed.emit()
+	var sheet := _open_sheet_of(screen)
+	assert_not_null(_button_in(sheet, "Open an issue on GitHub"))
+	assert_null(_button_in(sheet, "Send an email"))
