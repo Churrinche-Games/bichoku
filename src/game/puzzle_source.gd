@@ -7,6 +7,8 @@ extends RefCounted
 signal ready(difficulty: StringName)
 
 var _seed_source: Callable
+## Web builds without threads generate on the spot (a 9x9 takes well under 100 ms).
+var _use_threads: bool
 var _mutex := Mutex.new()
 ## difficulty -> WorkerThreadPool task id, until someone has waited on it.
 var _tasks := {}
@@ -14,8 +16,11 @@ var _tasks := {}
 var _games := {}
 
 
-func _init(seed_source: Callable = Callable()) -> void:
+func _init(
+	seed_source: Callable = Callable(), use_threads: bool = OS.has_feature("threads")
+) -> void:
 	_seed_source = seed_source
+	_use_threads = use_threads
 
 
 func _notification(what: int) -> void:
@@ -30,7 +35,10 @@ func prepare(difficulty: StringName) -> void:
 	if _tasks.has(difficulty) or _has_game(difficulty):
 		return
 	var seed: int = _seed_source.call() if _seed_source.is_valid() else randi()
-	_tasks[difficulty] = WorkerThreadPool.add_task(_generate.bind(difficulty, seed))
+	if _use_threads:
+		_tasks[difficulty] = WorkerThreadPool.add_task(_generate.bind(difficulty, seed))
+	else:
+		_generate(difficulty, seed)
 
 
 ## The ready game, or null when it isn't ready yet. Either way the next one is prepared.

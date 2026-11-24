@@ -26,14 +26,26 @@ GUT exits 0 when a test script fails to parse, so use `tools/check.sh`, not bare
 ## Architecture
 
 ```
-project.godot          portrait 720x1280, mobile renderer; main scene src/main/main.tscn
-src/<feature>/         game code and scenes, one folder per feature
-tests/                 GUT tests mirroring src/
+project.godot          portrait 720x1280, mobile renderer; main scene src/screen/game_screen.tscn
+src/engine/            the puzzle engine, ported from ~/src/sudoku (same seed, same puzzle):
+                       rng.gd (Mulberry32), shape.gd (cells + houses), solver.gd, generator.gd
+src/game/              difficulty.gd, game_state.gd, rules.gd (pure rules, port of the web game.ts),
+                       puzzle_source.gd (background generation, one ready per difficulty),
+                       game_store.gd (saved game, best times, settings on the kit's SaveStore)
+src/animals/           animals.gd: ids, inks, placeholder initials, name/fact translation keys
+src/board/             board_layout.gd (screen-size math), board_view.gd (draws the board)
+src/screen/            game_screen.tscn/.gd (the screen, built in code), sheet.gd (help, settings, win, confirm)
+src/i18n/strings.csv   all interface text, es and en (Godot picks the device language, fallback en)
+tests/                 GUT tests mirroring src/; tests/engine/fixtures.json from the web engine
+tools/fixtures/        make_engine_fixtures.mjs: rebuild the fixtures (Node 26, needs ~/src/sudoku)
 addons/churrinche_kit/ the kit (vendored, see Repo)
 addons/gut/            GUT (vendored with the kit)
 export_presets.cfg     Android and Web; tests, GUT, docs and tools are excluded from exports
-docs/superpowers/      specs/ and plans/
+docs/superpowers/      specs/ and plans/ (plan 1 of 4 done: the playable game)
 ```
+
+- The animals are placeholders (colored initials) until the art plan; the inks are final candidates.
+- Rules never mutate a GameState; every screen change goes through Rules and is saved.
 
 ## Conventions
 
