@@ -12,8 +12,6 @@ PREPARING,Preparando el juego…,Preparing the game…
 CONFIRM_NEW_TITLE,¿Empezar otro juego?,Start a new game?
 CONFIRM_NEW_TEXT,Vas a perder el juego que tenés empezado.,You'll lose the game in progress.
 CONFIRM_NEW_YES,Empezar,Start
-CANCEL,Cancelar,Cancel
-CLOSE,Cerrar,Close
 NEW_GAME,Nuevo juego,New game
 WIN_TITLE,¡Resuelto!,Solved!
 WIN_TIME,Tiempo: %s,Time: %s

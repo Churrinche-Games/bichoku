@@ -8,6 +8,7 @@ config/name="Bichoku"
 config/version="0.1.0"
 run/main_scene="res://src/screen/game_screen.tscn"
 config/features=PackedStringArray("4.7", "Mobile")
+config/quit_on_go_back=false
 
 [display]
 
@@ -24,5 +25,5 @@ textures/vram_compression/import_etc2_astc=true
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://src/i18n/strings.es.translation", "res://src/i18n/strings.en.translation")
+locale/translations=PackedStringArray("res://src/i18n/strings.es.translation", "res://src/i18n/strings.en.translation", "res://addons/churrinche_kit/i18n/kit_strings.es.translation", "res://addons/churrinche_kit/i18n/kit_strings.en.translation")
 locale/fallback="en"

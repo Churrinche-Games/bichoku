@@ -7,6 +7,9 @@ signal game_started
 
 const PAPER := Color("#f1e6d6")
 const LINE := Color("#4a3b2e")
+const PALETTE := {
+	"paper": PAPER, "line": LINE, "accent": Color("#b5532a"), "error": Color("#b3261e")
+}
 ## Side padding of the column (16 dp).
 const PAD := 32.0
 const GAP := 12
@@ -29,7 +32,7 @@ var _settings: Dictionary
 var _focused := true
 var _pending := &""
 var _ticks_since_save := 0
-var _sheet: Sheet
+var _sheet: KitSheet
 var _confirm_open := false
 
 var _column: VBoxContainer
@@ -50,7 +53,7 @@ var _hint: Button
 
 
 func _ready() -> void:
-	theme = _make_theme()
+	theme = KitTheme.make(PALETTE)
 	_store = GameStore.new(store_path)
 	_settings = _store.settings()
 	_source = PuzzleSource.new()
@@ -134,8 +137,8 @@ func request_new_game(difficulty: StringName) -> void:
 		sheet.add_title(tr("CONFIRM_NEW_TITLE"))
 		sheet.add_text(tr("CONFIRM_NEW_TEXT"))
 		sheet.add_button(tr("CONFIRM_NEW_YES"), _start.bind(difficulty))
-		sheet.add_button(tr("CANCEL"))
-		sheet.tree_exited.connect(func() -> void: _confirm_open = false)
+		sheet.add_button(tr("KIT_CANCEL"))
+		sheet.closed.connect(func() -> void: _confirm_open = false)
 	else:
 		_start(difficulty)
 
@@ -370,11 +373,11 @@ static func format_time(ms: int) -> String:
 # --- sheets -------------------------------------------------------------------------------------
 
 
-func _open_sheet() -> Sheet:
+func _open_sheet() -> KitSheet:
 	if _sheet != null:
 		_sheet.close()
-	_sheet = Sheet.new()
-	_sheet.tree_exited.connect(func() -> void: _sheet = null)
+	_sheet = KitSheet.new()
+	_sheet.closed.connect(func() -> void: _sheet = null)
 	add_child(_sheet)
 	return _sheet
 
@@ -383,7 +386,7 @@ func _show_help() -> void:
 	var sheet := _open_sheet()
 	sheet.add_title(tr("HELP_TITLE"))
 	sheet.add_text(tr("HELP_TEXT"))
-	sheet.add_button(tr("CLOSE"))
+	sheet.add_button(tr("KIT_CLOSE"))
 
 
 func _show_settings() -> void:
@@ -391,7 +394,7 @@ func _show_settings() -> void:
 	sheet.add_title(tr("SETTINGS_TITLE"))
 	for key in ["animals_left", "mark_clashes", "show_numbers"]:
 		sheet.add_check(tr("SETTING_" + key.to_upper()), _settings[key], _change_setting.bind(key))
-	sheet.add_button(tr("CLOSE"))
+	sheet.add_button(tr("KIT_CLOSE"))
 
 
 func _change_setting(value: bool, key: String) -> void:
@@ -416,32 +419,4 @@ func _show_win(new_best: bool) -> void:
 	name_label.add_theme_color_override("font_color", Animals.ink(animal))
 	sheet.add_text(tr(Animals.fact_key(animal)))
 	sheet.add_button(tr("NEW_GAME"), _start.bind(state.difficulty))
-	sheet.add_button(tr("CLOSE"))
-
-
-func _make_theme() -> Theme:
-	var t := Theme.new()
-	t.default_font_size = 30
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = PAPER
-	normal.border_color = LINE
-	normal.set_border_width_all(2)
-	normal.set_corner_radius_all(16)
-	var pressed: StyleBoxFlat = normal.duplicate()
-	pressed.bg_color = LINE
-	for style in ["normal", "hover", "focus", "disabled"]:
-		t.set_stylebox(style, "Button", normal)
-	t.set_stylebox("pressed", "Button", pressed)
-	t.set_stylebox("hover_pressed", "Button", pressed)
-	t.set_color("font_color", "Button", LINE)
-	t.set_color("font_hover_color", "Button", LINE)
-	t.set_color("font_pressed_color", "Button", PAPER)
-	t.set_color("font_hover_pressed_color", "Button", PAPER)
-	t.set_color("font_disabled_color", "Button", Color(LINE, 0.4))
-	t.set_color("font_color", "Label", LINE)
-	t.set_color("font_color", "CheckButton", LINE)
-	var panel := StyleBoxFlat.new()
-	panel.bg_color = PAPER
-	panel.set_corner_radius_all(24)
-	t.set_stylebox("panel", "PanelContainer", panel)
-	return t
+	sheet.add_button(tr("KIT_CLOSE"))

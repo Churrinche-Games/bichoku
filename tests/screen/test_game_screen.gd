@@ -162,3 +162,17 @@ func test_tabs_show_the_current_difficulty_after_asking() -> void:
 	assert_true(screen.is_confirm_open())
 	assert_false(hard.button_pressed, "hard not lit while asking")
 	assert_true(screen.tab_button(Difficulty.EASY).button_pressed)
+
+
+func _open_sheet_of(screen: GameScreen) -> KitSheet:
+	for child in screen.get_children():
+		if child is KitSheet:
+			return child
+	return null
+
+
+func test_help_opens_a_kit_sheet() -> void:
+	_saved_game()
+	var screen := _screen()
+	(screen.layout_parts().header.get_child(1) as Button).pressed.emit()
+	assert_not_null(_open_sheet_of(screen))
