@@ -72,15 +72,16 @@ function hornero(dr, ink) {
 function yaguarete(dr, ink) {
   const sil =
     "M100,60 C92,50 94,36 106,35 C113,35 118,40 120,43 C128,39 138,38 145,41 C149,32 162,31 165,42 " +
-    "C167,50 163,56 161,60 C171,72 171,96 161,108 C157,114 153,118 151,122 C157,140 159,170 157,195 " +
+    "C167,50 163,56 161,60 C168,68 172,78 176,84 C182,88 188,94 184,101 C180,107 172,109 164,111 " +
+    "C158,114 153,118 151,122 C157,140 159,170 157,195 " +
     "C157,202 150,204 140,204 L78,204 C66,204 58,200 55,193 C38,197 22,187 22,169 C22,154 31,145 41,147 " +
     "C47,149 47,157 41,161 C35,166 38,178 55,178 C57,150 67,120 88,104 C90,90 94,72 100,60 Z";
-  const MUZZLE = "M144,96 C150,86 166,86 170,96 C172,104 164,112 156,112 C148,112 142,104 144,96 Z";
+  const MUZZLE = "M158,96 C164,87 178,88 183,96 C186,104 177,110 168,110 C160,110 155,103 158,96 Z";
   const CHEST = "M136,124 C146,118 156,128 156,150 C156,176 152,196 144,200 C134,196 130,170 130,150 C130,136 132,128 136,124 Z";
   const spots = [[88, 128], [112, 132], [104, 160], [80, 160], [124, 182], [92, 188], [116, 64], [134, 58]];
   dr.path(sil, { fill: PAPER });
   dr.engrave(sil, ink, (x, y) => {
-    if (Math.hypot(x - 142, y - 76) < 9) return 0;
+    if (Math.hypot(x - 146, y - 74) < 9) return 0;
     if (dr.inside(MUZZLE, x, y) || dr.inside(CHEST, x, y)) return 0;
     const f = clamp(ell(x, y, 104, 130, 64, 80));
     return 0.38 + 0.5 * f ** 3;
@@ -96,64 +97,75 @@ function yaguarete(dr, ink) {
   dr.outline(sil, ink);
   dr.path(MUZZLE, { fill: "none", stroke: ink, "stroke-width": 1.1 });
   dr.path(CHEST, { fill: "none", stroke: ink, "stroke-width": 1.1 });
-  dr.path("M160,93 L168,93 L164,99 Z", { fill: ink });
-  dr.line("M164,99 L164,104 M158,107 C161,109 164,106 164,104 C164,106 167,109 170,107", ink, 1.2);
+  dr.path("M172,86 C179,82 190,87 189,94 C188,100 181,101 177,100 C172,98 168,90 172,86 Z", { fill: ink }); // nose
+  dr.line("M181,97 L180,103 M171,107 C175,109 179,106 180,103", ink, 1.2); // mouth
   dr.line("M104,44 C108,46 110,50 110,54 M152,44 C155,46 156,50 155,54", ink, 1.2);
   dr.line("M138,200 L138,192 M146,200 L146,192", ink, 1.2);
-  dr.eye(142, 76, 4.6, ink);
+  dr.eye(146, 74, 4.6, ink);
 }
 
+// A plump pup sitting up like the Mar del Plata statues: chest out, thick neck, head raised.
 function lobo(dr, ink) {
   const sil =
-    "M148,34 C162,34 172,40 178,48 C184,54 182,62 174,64 C168,66 164,70 162,76 C158,104 156,130 154,150 " +
-    "C162,170 172,186 182,198 C184,204 176,206 168,204 C158,202 146,198 138,194 C124,196 104,198 84,196 " +
-    "C68,196 54,198 40,204 C30,206 18,204 18,198 C22,192 34,188 44,184 C40,176 44,168 52,160 " +
-    "C72,128 104,96 124,72 C128,52 136,34 148,34 Z";
+    "M140,34 C154,30 168,34 176,42 C182,48 180,56 172,58 C168,60 164,62 162,66 " +
+    "C170,84 178,104 176,128 C174,148 166,162 160,170 C170,180 182,190 190,198 " +
+    "C192,204 184,208 172,206 C162,206 154,204 148,202 C130,208 98,208 80,204 " +
+    "C66,202 54,200 44,204 C34,208 20,206 20,200 C24,192 34,188 42,184 " +
+    "C30,166 34,140 52,118 C72,92 100,72 118,58 C124,44 130,36 140,34 Z";
   dr.path(sil, { fill: PAPER });
   dr.engrave(sil, ink, (x, y) => {
-    if (Math.hypot(x - 156, y - 50) < 9) return 0;
-    if (ell(x, y, 172, 58, 10, 7) < 1) return 0.1; // pale muzzle
-    const f = clamp(ell(x, y, 110, 140, 80, 90));
+    if (Math.hypot(x - 150, y - 44) < 9) return 0;
+    if (ell(x, y, 170, 50, 9, 7) < 1) return 0.1; // pale muzzle
+    const f = clamp(ell(x, y, 106, 136, 82, 90));
     let t = 0.8 + 0.2 * f ** 2;
-    if (ell(x, y, 142, 140, 14, 40) < 1) t -= 0.3; // lighter chest
+    if (ell(x, y, 160, 116, 14, 42) < 1) t -= 0.3; // lighter chest
     return t;
-  }, BODY(110));
+  }, BODY(106));
   dr.outline(sil, ink);
-  dr.line("M154,150 C150,170 146,184 138,194", ink, 1.2); // front flipper edge
-  dr.line("M60,170 C56,180 50,186 44,184", ink, 1.2); // rear flipper edge
-  dr.line("M138,48 C140,50 140,54 138,56", ink, 1.4); // tiny ear
-  dr.line("M172,60 L190,56 M172,62 L190,64 M170,64 L186,70", ink, 0.8); // whiskers
-  dr.circle(178, 54, 1.8, { fill: ink });
-  dr.eye(156, 50, 4.8, ink);
+  dr.line("M160,170 C164,182 170,190 178,197", ink, 1.2); // front flipper edge
+  dr.line("M44,186 C40,192 32,196 26,198", ink, 1.2); // rear flipper edge
+  dr.line("M124,70 C132,78 138,86 142,98 M116,80 C122,90 126,100 128,112", ink, 1); // folds of the neck
+  dr.line("M130,46 C132,48 132,52 130,54", ink, 1.4); // tiny ear
+  dr.line("M168,54 L186,50 M168,56 L186,58 M166,58 L182,64", ink, 0.8); // whiskers
+  dr.circle(174, 47, 1.8, { fill: ink });
+  dr.eye(150, 44, 4.6, ink);
 }
 
+// A young condor drying its wings: fingered wing tips, the pale wing patch, the white ruff.
 function condor(dr, ink) {
-  const BODY_SIL = loop(120, (t) => {
-    const a = t * PI * 2;
-    const r = 1 + 0.05 * Math.sin(a * 16) ** 2;
-    return [98 + Math.cos(a) * 60 * r, 146 + Math.sin(a) * 52 * r];
-  });
-  const HEAD = "M122,104 C118,86 120,66 134,58 C146,51 160,53 165,63 C173,63 181,69 181,79 C181,86 177,90 172,88 C172,83 170,81 166,81 C162,88 158,94 154,104 Z";
+  // Four long primaries, spread like fingers.
+  const LEFT = [[94, 100], [66, 84], [38, 84], [14, 96], [6, 110], [24, 112], [10, 126], [28, 126],
+    [18, 142], [36, 138], [34, 154], [50, 146], [62, 152], [80, 148], [92, 140]];
+  const wing = (pts) => "M" + pts.map(([x, y]) => `${x},${y}`).join(" L") + " Z";
+  const SPREAD = LEFT.map(([x, y]) => [Math.round(94 + (x - 94) * 0.9), Math.round(100 + (y - 100) * 0.9)]);
+  const WING_L = wing(SPREAD);
+  const WING_R = wing(SPREAD.map(([x, y]) => [220 - x, y]).reverse());
+  const BODY_SIL = "M112,92 C132,92 142,116 142,142 C142,170 130,190 112,190 C94,190 82,170 82,142 C82,116 92,92 112,92 Z";
+  const HEAD = "M106,92 C104,78 110,64 122,61 C132,58 140,62 142,68 C149,68 155,73 155,81 C155,87 151,89 148,86 C148,83 146,81 143,81 C139,87 132,91 124,94 Z";
   const RUFF = loop(60, (t) => {
     const a = t * PI * 2;
-    const r = 1 + 0.08 * Math.abs(Math.sin(a * 6));
-    return [138 + Math.cos(a) * 20 * r, 104 + Math.sin(a) * 7 * r];
+    const r = 1 + 0.12 * Math.abs(Math.sin(a * 7));
+    return [114 + Math.cos(a) * 22 * r, 94 + Math.sin(a) * 8 * r];
   });
+  const patch = (x, y, sx) => {
+    const d = Math.hypot(x - sx, y - 100);
+    return d > 26 && d < 44 && y < 132;
+  };
+  for (const [w, sx] of [[WING_R, 126], [WING_L, 94]]) {
+    dr.path(w, { fill: PAPER });
+    dr.engrave(w, ink, (x, y) => (patch(x, y, sx) ? 0.05 : 0.88), BODY(112));
+    dr.outline(w, ink);
+  }
+  dr.line("M104,186 L102,204 M95,206 L110,206 M120,186 L122,204 M116,206 L131,206", ink, 2.2);
   dr.path(BODY_SIL, { fill: PAPER });
-  dr.engrave(BODY_SIL, ink, (x, y) => {
-    const f = clamp(ell(x, y, 98, 146, 60, 52));
-    let t = 0.6 + 0.35 * f ** 3;
-    if (ell(x, y, 80, 150, 36, 30) < 1) t += 0.3; // wing
-    return t;
-  }, BODY(98));
+  dr.engrave(BODY_SIL, ink, (x, y) => 0.75 + 0.2 * clamp(ell(x, y, 112, 142, 30, 48)) ** 3, BODY(112));
   dr.outline(BODY_SIL, ink);
-  dr.line("M82,196 L80,206 M74,208 L88,206 M112,196 L114,206 M108,208 L122,206", ink, 2);
   dr.path(HEAD, { fill: PAPER });
-  dr.engrave(HEAD, ink, (x, y) => (Math.hypot(x - 150, y - 70) < 8 || x > 166 ? 0 : 0.85), BODY(140, 0.5));
+  dr.engrave(HEAD, ink, (x, y) => (Math.hypot(x - 127, y - 72) < 7 || x > 144 ? 0 : 0.55), BODY(120, 0.5));
   dr.outline(HEAD, ink);
   dr.path(RUFF, { fill: PAPER, stroke: ink, "stroke-width": 1.3 * dr.L.ow, "stroke-linejoin": "round" });
-  dr.line("M166,70 C170,72 174,76 176,82", ink, 1.1); // beak edge
-  dr.eye(150, 70, 4.4, ink);
+  dr.line("M144,73 C148,75 152,79 153,84", ink, 1.1); // beak edge
+  dr.eye(127, 72, 3.8, ink);
 }
 
 function yacare(dr, ink) {
