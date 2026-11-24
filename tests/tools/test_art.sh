@@ -14,7 +14,9 @@ ids=(yaguarete lobo_marino pinguino condor hornero yacare flamenco guanaco balle
 missing=""
 for id in "${ids[@]}"; do [ -f "$art/$id-simple.svg" ] || missing+=" $id"; done
 check test_every_animal_has_simple '[ -z "$missing" ]'
-check test_full_only_for_approved '[ "$(cd "$art" && ls *-full.svg | tr "\n" " ")" = "hornero-full.svg pinguino-full.svg " ]'
+missing_full=""
+for id in "${ids[@]}"; do [ -f "$art/$id-full.svg" ] || missing_full+=" $id"; done
+check test_every_animal_has_full '[ -z "$missing_full" ]'
 
 # Each SVG uses only the paper, "none" and its own ink, which must be the ink in animals.gd.
 inks=($(sed -n '/^const _INKS/,/^]/p' "$root/src/animals/animals.gd" | grep -oE '#[0-9a-fA-F]{6}' | tr 'A-F' 'a-f'))

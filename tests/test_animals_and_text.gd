@@ -80,6 +80,9 @@ func test_every_animal_has_a_texture() -> void:
 		assert_not_null(Animals.texture(d, true), str(d))
 
 
-func test_full_drawing_falls_back_to_simple() -> void:
-	assert_string_contains(Animals.texture(3, true).resource_path, "pinguino-full.svg")
-	assert_string_contains(Animals.texture(1, true).resource_path, "yaguarete-simple.svg")
+func test_full_textures_are_large() -> void:
+	# The win picture is shown at 220 units: imported at 3× so it stays sharp on dense phones.
+	for d in range(1, 10):
+		var full := Animals.texture(d, true)
+		assert_string_contains(full.resource_path, "%s-full.svg" % Animals.id(d))
+		assert_gte(full.get_width(), 600, str(d))

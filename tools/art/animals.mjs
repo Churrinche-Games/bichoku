@@ -31,15 +31,15 @@ function pinguino(dr, ink) {
     const f = clamp(ell(x, y, 104, 150, 52, 54));
     return 0.04 + 0.6 * f ** 3; // white belly, shaded at the rim
   }, { circles: [104, -150], r0: 170, r1: 360, a0: PI / 2 - 0.6, a1: PI / 2 + 0.6, sp: 2.6 });
-  dr.path(STRIPE, { fill: PAPER, stroke: ink, "stroke-width": 1.1, "stroke-linejoin": "round" });
+  dr.path(STRIPE, { fill: PAPER, stroke: ink, "stroke-width": 1.1 * L.ln, "stroke-linejoin": "round" });
   dr.circle(122, 73, 7.2 * L.ey, { fill: PAPER });
   dr.outline(sil, ink);
   dr.ellipse(122, 73, 4.2 * L.ey, 4.8 * L.ey, { fill: ink });
   dr.circle(122 + 1.4 * L.ey, 73 - 1.5 * L.ey, 1.4 * L.ey, { fill: PAPER });
-  dr.path("M142,72 L162,80 L142,88 Z", { fill: PAPER, stroke: ink, "stroke-width": 1.6, "stroke-linejoin": "round" });
+  dr.path("M142,72 L162,80 L142,88 Z", { fill: PAPER, stroke: ink, "stroke-width": 1.6 * L.ln, "stroke-linejoin": "round" });
   dr.line("M144,80 L157,80", ink, 1.1);
-  dr.ellipse(86, 202, 10, 4, { fill: PAPER, stroke: ink, "stroke-width": 1.6 });
-  dr.ellipse(116, 202, 10, 4, { fill: PAPER, stroke: ink, "stroke-width": 1.6 });
+  dr.ellipse(86, 202, 10, 4, { fill: PAPER, stroke: ink, "stroke-width": 1.6 * L.ln });
+  dr.ellipse(116, 202, 10, 4, { fill: PAPER, stroke: ink, "stroke-width": 1.6 * L.ln });
 }
 
 function hornero(dr, ink) {
@@ -58,7 +58,7 @@ function hornero(dr, ink) {
     return t;
   }, BODY(100));
   dr.outline(sil, ink);
-  dr.path(BROW, { fill: PAPER, stroke: ink, "stroke-width": 1, "stroke-linejoin": "round" });
+  dr.path(BROW, { fill: PAPER, stroke: ink, "stroke-width": 1 * L.ln, "stroke-linejoin": "round" });
   dr.circle(130, 86, 7.6 * L.ey, { fill: PAPER });
   dr.line("M54,114 C62,150 92,172 124,164", ink, 1.4);
   dr.line("M160,104 L176,104", ink, 1.3);
@@ -95,8 +95,8 @@ function yaguarete(dr, ink) {
     });
   }
   dr.outline(sil, ink);
-  dr.path(MUZZLE, { fill: "none", stroke: ink, "stroke-width": 1.1 });
-  dr.path(CHEST, { fill: "none", stroke: ink, "stroke-width": 1.1 });
+  dr.path(MUZZLE, { fill: "none", stroke: ink, "stroke-width": 1.1 * dr.L.ln });
+  dr.path(CHEST, { fill: "none", stroke: ink, "stroke-width": 1.1 * dr.L.ln });
   dr.path("M172,85 C173,79 189,79 190,85 C190,91 184,95 181,95 C177,95 171,91 172,85 Z", { fill: ink }); // a cat's rounded nose
   for (const [wx, wy] of [[168, 92], [172, 98], [166, 98], [176, 101]]) dr.circle(wx, wy, 0.9 * dr.L.ln, { fill: ink }); // whisker spots
   dr.line("M181,95 L181,99 M176,102 C179,104 181,101 181,99 C181,101 184,104 187,102", ink, 1.2); // mouth
@@ -277,5 +277,4 @@ export const ANIMALS = [
   { id: "ballena", ink: "#2a6a6e", draw: ballena },
 ];
 
-/** Drawn at full detail; the rest wait for art checkpoint 1. */
-export const FULL_APPROVED = ["pinguino", "hornero"];
+
