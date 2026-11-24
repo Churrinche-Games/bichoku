@@ -21,6 +21,7 @@ const BUTTON_H := 96.0
 ## Everything in the column except the board, including gaps and the top and bottom margins.
 const CHROME := HEADER_H + TABS_H + META_H + BUTTON_H * 2 + GAP * 5 + 48.0
 const SAVE_EVERY_TICKS := 10
+const EFFECTS: Array[StringName] = [&"place", &"note", &"clash", &"hint", &"undo", &"win"]
 
 var store_path := "user://bichoku.json"
 ## Where the About, Feedback and Support pages read the game's facts (tests point elsewhere).
@@ -74,6 +75,9 @@ func _ready() -> void:
 	_language = KitLanguage.apply(_settings.language)
 	sound = KitSound.new()
 	add_child(sound)
+	for effect in EFFECTS:
+		sound.add_effect(effect, load("res://src/sound/%s.wav" % effect))
+	sound.set_music(load("res://src/sound/music.wav"))
 	_apply_sound()
 	_source = PuzzleSource.new()
 	_source.ready.connect(_on_source_ready)
@@ -188,14 +192,18 @@ func _set_state(next: GameState) -> void:
 
 
 ## Applies an action's result: saves it and shows the win sheet on the move that wins.
-func _apply(next: GameState) -> void:
+## effect is the sound the action makes; the winning move plays the win sound instead.
+func _apply(next: GameState, effect: StringName = &"") -> void:
 	if state == null or next == state:
 		return
 	var was_won := state.won
 	_set_state(next)
 	_save()
 	if state.won and not was_won:
+		sound.play(&"win")
 		_show_win(_store.record_win(state))
+	elif effect:
+		sound.play(effect)
 
 
 func _save() -> void:
@@ -209,17 +217,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	var key := (event as InputEventKey).keycode
 	if key >= KEY_1 and key <= KEY_9:
-		_apply(Rules.input(state, key - KEY_0))
+		_on_palette(key - KEY_0)
 	elif key in [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN]:
 		_move_selection(key)
 	elif key in [KEY_BACKSPACE, KEY_DELETE]:
-		_apply(Rules.erase(state))
+		_apply(Rules.erase(state), &"note")
 	elif key == KEY_N:
 		_set_state(Rules.toggle_notes(state))
 	elif key == KEY_U or (key == KEY_Z and (event as InputEventKey).ctrl_pressed):
-		_apply(Rules.undo(state))
+		_apply(Rules.undo(state), &"undo")
 	elif key == KEY_H:
-		_apply(Rules.hint(state))
+		_apply(Rules.hint(state), &"hint")
 	else:
 		return
 	get_viewport().set_input_as_handled()
@@ -310,11 +318,11 @@ func _build() -> void:
 		_palette.add_child(b)
 
 	_tools = _row(BUTTON_H)
-	_undo = _tool(tr("TOOL_UNDO"), func() -> void: _apply(Rules.undo(state)))
-	_erase = _tool(tr("TOOL_ERASE"), func() -> void: _apply(Rules.erase(state)))
+	_undo = _tool(tr("TOOL_UNDO"), func() -> void: _apply(Rules.undo(state), &"undo"))
+	_erase = _tool(tr("TOOL_ERASE"), func() -> void: _apply(Rules.erase(state), &"note"))
 	_notes = _tool(tr("TOOL_NOTES"), func() -> void: _set_state(Rules.toggle_notes(state)))
 	_notes.toggle_mode = true
-	_hint = _tool(tr("TOOL_HINT"), func() -> void: _apply(Rules.hint(state)))
+	_hint = _tool(tr("TOOL_HINT"), func() -> void: _apply(Rules.hint(state), &"hint"))
 
 
 ## Builds the controls again (after a language change); the game itself is untouched.
@@ -332,9 +340,16 @@ func _on_cell_pressed(cell: int) -> void:
 		_set_state(Rules.select(state, cell))
 
 
+## An animal from the palette or the keyboard: a note in notes mode, else placed (a clash sounds
+## different when the animal just placed repeats in its row, column or box).
 func _on_palette(digit: int) -> void:
-	if state != null:
-		_apply(Rules.input(state, digit))
+	if state == null:
+		return
+	var next := Rules.input(state, digit)
+	var effect := &"note" if state.notes_mode else &"place"
+	if effect == &"place" and next.selected in Rules.conflicts(next):
+		effect = &"clash"
+	_apply(next, effect)
 
 
 func _when_playing(action: Callable) -> void:
