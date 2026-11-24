@@ -81,7 +81,8 @@ Same rules as the web version (port `~/src/sudoku/src/features/game/game.ts`):
 - **Difficulty** by clue count: Easy stops removing clues at 40, Medium at 32, Hard removes as many as it can (about 24).
 - **Best time** per difficulty, only for games solved without hints; the win screen says so when hints were used.
 - **Win screen:** time, best time, and a fact about one animal (a different one each game), with that animal's full drawing.
-- **Settings:** animals left (on), mark clashes (on), show numbers (off), language (Español default, English; my call: the audience is mainly Argentine), music and effects (separate toggles). With "animals left" off, finished animals stay lit in the palette.
+- **Settings:** animals left (on), mark clashes (on), show numbers (off), language, music and effects (separate on/off toggles, in the settings menu). With "animals left" off, finished animals stay lit in the palette.
+- **Language (Juan, 2026-11-24):** on first launch it follows the device: Spanish if the device language is Spanish, otherwise English (my call for languages other than Spanish and English). Choosing a language in settings overrides that and is saved.
 - **Saving** with the kit's `SaveStore`: the game in progress (on every change), best times and settings. A broken save never crashes the game; it starts fresh.
 - **Input:** tap a cell, then an animal. On the web build, the web version's keys too: 1–9, arrows, Backspace, N (notes), U or Ctrl+Z (undo), H (hint).
 
@@ -121,7 +122,7 @@ Written in `~/src/game-kit` (generic, tested there), tagged, synced here. Only w
 - **About:** game name and version, "Source code on GitHub" link, licenses and credits (including `THIRD_PARTY.md` items).
 - **Feedback:** opens an email with the game and version filled in ("Comentarios sobre Bichoku v…" / "Feedback on Bichoku v…"), plus a link to GitHub issues.
 - **Support:** by build flag `store = play | itch`. Play: no donation links or wording. itch: links to the donation pages.
-- **i18n:** shared strings (es/en) and the language switch, saved in settings.
+- **i18n:** shared strings (es/en), the device-language default (Spanish for `es*`, else English) and the language switch, saved in settings.
 - **Sound:** effects player, music player, separate mute toggles, saved.
 - **Theme:** a shared `Theme` base and palette slots (paper, line, accent, error) the game fills.
 - **Mobile:** back button handling, pause on background, safe areas.
@@ -153,4 +154,6 @@ The portfolio's release process, in order: signed AAB with Play App Signing; web
 - **2026-11-24 Puzzles:** port the engine and generate on the device.
 - **2026-11-24 Screen:** the web layout with the engraving look (mockup accepted); palette reviewed once the art exists.
 - **2026-11-24 Art reviews:** two checkpoints, shapes first, then inks and full drawings; penguin and hornero shown finished from the start.
+- **2026-11-24 Language:** follows the device on first launch (Spanish or English); settings override.
+- **2026-11-24 Sound settings:** music and effects toggles in the settings menu.
 - **2026-11-24 Release split:** the plan ends at a release candidate; account steps go through `release-game` with Juan (proposed, see Store and release).
