@@ -34,14 +34,18 @@ src/game/              difficulty.gd, game_state.gd, rules.gd (pure rules, port 
                        game_store.gd (saved game, best times, settings on the kit's SaveStore)
 src/animals/           animals.gd: ids, inks, placeholder initials, name/fact translation keys
 src/board/             board_layout.gd (screen-size math), board_view.gd (draws the board)
-src/screen/            game_screen.tscn/.gd (the screen, built in code), sheet.gd (help, settings, win, confirm)
-src/i18n/strings.csv   all interface text, es and en (Godot picks the device language, fallback en)
+src/screen/            game_screen.tscn/.gd (the screen, built in code; help, settings, win, confirm,
+                       leave use the kit's KitSheet; About/Feedback/Support are the kit's KitPages)
+src/i18n/strings.csv   the game's interface text, es and en; shared KIT_* strings come from the kit.
+                       Language: KitLanguage (device default es/en, setting overrides)
+game_info.cfg          name, repo, feedback email, donation links for the kit pages (exported via include_filter)
 tests/                 GUT tests mirroring src/; tests/engine/fixtures.json from the web engine
 tools/fixtures/        make_engine_fixtures.mjs: rebuild the fixtures (Node 26, needs ~/src/sudoku)
 addons/churrinche_kit/ the kit (vendored, see Repo)
 addons/gut/            GUT (vendored with the kit)
-export_presets.cfg     Android and Web; tests, GUT, docs and tools are excluded from exports
-docs/superpowers/      specs/ and plans/ (plan 1 of 4 done: the playable game)
+export_presets.cfg     Android (Play, feature `play`), Web and Android itch (feature `itch`, the only
+                       builds that may show donations); tests, GUT, docs and tools are excluded
+docs/superpowers/      specs/ and plans/ (plans 1-2 of 4 done: the playable game, kit modules)
 ```
 
 - The animals are placeholders (colored initials) until the art plan; the inks are final candidates.
