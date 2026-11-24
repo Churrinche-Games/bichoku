@@ -109,3 +109,18 @@ func test_music_is_loaded_and_off_by_default() -> void:
 	assert_false(screen.sound.is_music_playing())
 	screen.sound.music_on = true
 	assert_true(screen.sound.is_music_playing())
+
+
+func test_no_clash_sound_when_clashes_are_hidden() -> void:
+	var saved := _saved_game()
+	GameStore.new(PATH).set_setting("mark_clashes", false)
+	var screen := _listening_screen(saved)
+	var cell := _first_empty(saved)
+	var clashing := 0
+	for c in range(cell - cell % 9, cell - cell % 9 + 9):
+		if saved.puzzle[c]:
+			clashing = saved.puzzle[c]
+			break
+	screen.board.cell_pressed.emit(cell)
+	screen.palette_button(clashing).pressed.emit()
+	assert_eq(_played, [&"place"] as Array[StringName])

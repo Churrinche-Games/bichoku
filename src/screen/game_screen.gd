@@ -347,7 +347,8 @@ func _on_palette(digit: int) -> void:
 		return
 	var next := Rules.input(state, digit)
 	var effect := &"note" if state.notes_mode else &"place"
-	if effect == &"place" and next.selected in Rules.conflicts(next):
+	# With clashes hidden, the sound mustn't give them away either.
+	if effect == &"place" and _settings.mark_clashes and next.selected in Rules.conflicts(next):
 		effect = &"clash"
 	_apply(next, effect)
 

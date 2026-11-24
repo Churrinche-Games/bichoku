@@ -107,13 +107,18 @@ func _draw_highlights(s: float) -> void:
 		for cell in 81:
 			if cell != sel and state.values[cell] == v:
 				var o := Vector2(cell % 9, cell / 9) * s
-				var y := o.y + s * 0.86
+				var y := underline_y(o, s)
 				draw_line(
 					Vector2(o.x + s * 0.25, y),
 					Vector2(o.x + s * 0.75, y),
 					Animals.ink(v),
 					maxf(2.0, s * 0.04)
 				)
+
+
+## The same-animal underline's height in a cell: below the pictures, above the grid line.
+static func underline_y(origin: Vector2, s: float) -> float:
+	return origin.y + s * 0.94
 
 
 ## Where an animal's picture goes in a cell: givens fill more of it than entered animals (until
