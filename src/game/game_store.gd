@@ -5,7 +5,15 @@ extends RefCounted
 ## not kept, as on the web version.
 
 const VERSION := 1
-const DEFAULT_SETTINGS := {"animals_left": true, "mark_clashes": true, "show_numbers": false}
+## language: "" follows the device (see KitLanguage). Music is off by default.
+const DEFAULT_SETTINGS := {
+	"animals_left": true,
+	"mark_clashes": true,
+	"show_numbers": false,
+	"language": "",
+	"music": false,
+	"effects": true,
+}
 
 var _store: SaveStore
 var _data: Dictionary

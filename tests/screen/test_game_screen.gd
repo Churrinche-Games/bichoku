@@ -5,6 +5,10 @@ const PATH := DIR + "/store.json"
 const SIZES := [Vector2i(720, 1280), Vector2i(720, 1600), Vector2i(960, 1280), Vector2i(2276, 1280)]
 
 
+func after_each() -> void:
+	TranslationServer.set_locale("en")
+
+
 func before_each() -> void:
 	DirAccess.make_dir_recursive_absolute(DIR)
 	for f in ["", ".tmp", ".broken"]:
@@ -176,3 +180,47 @@ func test_help_opens_a_kit_sheet() -> void:
 	var screen := _screen()
 	(screen.layout_parts().header.get_child(1) as Button).pressed.emit()
 	assert_not_null(_open_sheet_of(screen))
+
+
+func _press_settings(screen: GameScreen) -> KitSheet:
+	(screen.layout_parts().header.get_child(2) as Button).pressed.emit()
+	return _open_sheet_of(screen)
+
+
+func _button_in(node: Node, text: String) -> Button:
+	for child in node.find_children("*", "Button", true, false):
+		if (child as Button).text == text:
+			return child
+	return null
+
+
+func test_language_follows_saved_setting() -> void:
+	_saved_game()
+	var store := GameStore.new(PATH)
+	store.set_setting("language", "en")
+	var screen := _screen()
+	assert_eq(screen.tab_button(Difficulty.EASY).text, "Easy")
+	screen.free()
+	store.set_setting("language", "es")
+	screen = _screen()
+	assert_eq(screen.tab_button(Difficulty.EASY).text, "Fácil")
+
+
+func test_switching_language_keeps_the_game() -> void:
+	_saved_game()
+	GameStore.new(PATH).set_setting("language", "en")
+	var screen := _screen()
+	var cell := _first_empty(screen.state)
+	screen.board.cell_pressed.emit(cell)
+	screen.tick_clock()
+	var before := screen.state
+	var sheet := _press_settings(screen)
+	_button_in(sheet, "Español").button_pressed = true
+	assert_eq(screen.tab_button(Difficulty.EASY).text, "Fácil")
+	assert_eq(screen.state.values, before.values)
+	assert_eq(screen.state.selected, cell)
+	assert_eq(screen.state.elapsed_ms, before.elapsed_ms)
+	var reopened := _open_sheet_of(screen)
+	assert_not_null(reopened)
+	assert_not_null(_button_in(reopened, "English"))
+	assert_eq(GameStore.new(PATH).settings().language, "es")

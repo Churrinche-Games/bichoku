@@ -8,7 +8,7 @@ signal game_started
 const PAPER := Color("#f1e6d6")
 const LINE := Color("#4a3b2e")
 const PALETTE := {
-	"paper": PAPER, "line": LINE, "accent": Color("#b5532a"), "error": Color("#b3261e")
+	"paper": PAPER, "line": LINE, "accent": Color("#b5532a"), "error": BoardView.CLASH
 }
 ## Side padding of the column (16 dp).
 const PAD := 32.0
@@ -35,6 +35,9 @@ var _ticks_since_save := 0
 var _sheet: KitSheet
 var _confirm_open := false
 
+var _language := ""
+
+var _ui: Control
 var _column: VBoxContainer
 var _header: HBoxContainer
 var _tabs: HBoxContainer
@@ -56,6 +59,7 @@ func _ready() -> void:
 	theme = KitTheme.make(PALETTE)
 	_store = GameStore.new(store_path)
 	_settings = _store.settings()
+	_language = KitLanguage.apply(_settings.language)
 	_source = PuzzleSource.new()
 	_source.ready.connect(_on_source_ready)
 	_build()
@@ -224,14 +228,19 @@ func _move_selection(key: Key) -> void:
 
 
 func _build() -> void:
+	_ui = Control.new()
+	_ui.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_ui)
+	move_child(_ui, 0)
 	var bg := ColorRect.new()
 	bg.color = PAPER
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
+	_ui.add_child(bg)
 	_column = VBoxContainer.new()
 	_column.alignment = BoxContainer.ALIGNMENT_CENTER
 	_column.add_theme_constant_override("separation", GAP)
-	add_child(_column)
+	_ui.add_child(_column)
 
 	_header = _row(HEADER_H)
 	var title := Label.new()
@@ -283,6 +292,16 @@ func _build() -> void:
 	_notes = _tool(tr("TOOL_NOTES"), func() -> void: _set_state(Rules.toggle_notes(state)))
 	_notes.toggle_mode = true
 	_hint = _tool(tr("TOOL_HINT"), func() -> void: _apply(Rules.hint(state)))
+
+
+## Builds the controls again (after a language change); the game itself is untouched.
+func _rebuild() -> void:
+	_ui.free()
+	_tab_buttons.clear()
+	_palette_buttons.clear()
+	_build()
+	_refresh()
+	_layout()
 
 
 func _on_cell_pressed(cell: int) -> void:
@@ -394,7 +413,22 @@ func _show_settings() -> void:
 	sheet.add_title(tr("SETTINGS_TITLE"))
 	for key in ["animals_left", "mark_clashes", "show_numbers"]:
 		sheet.add_check(tr("SETTING_" + key.to_upper()), _settings[key], _change_setting.bind(key))
+	sheet.add_text(tr("KIT_LANGUAGE"))
+	var languages: Array[Dictionary] = []
+	for code: String in KitLanguage.SUPPORTED:
+		languages.append({"text": KitLanguage.display_name(code), "value": code})
+	sheet.add_choice(languages, _language, _change_language)
 	sheet.add_button(tr("KIT_CLOSE"))
+
+
+func _change_language(code: String) -> void:
+	if code == _language:
+		return
+	_store.set_setting("language", code)
+	_settings = _store.settings()
+	_language = KitLanguage.apply(code)
+	_rebuild()
+	_show_settings()
 
 
 func _change_setting(value: bool, key: String) -> void:

@@ -86,7 +86,17 @@ func test_best_keeps_the_faster() -> void:
 
 func test_settings_defaults_and_changes() -> void:
 	var store := GameStore.new(PATH)
-	assert_eq(store.settings(), {"animals_left": true, "mark_clashes": true, "show_numbers": false})
+	assert_eq(
+		store.settings(),
+		{
+			"animals_left": true,
+			"mark_clashes": true,
+			"show_numbers": false,
+			"language": "",
+			"music": false,
+			"effects": true,
+		}
+	)
 	store.set_setting("show_numbers", true)
 	assert_true(GameStore.new(PATH).settings().show_numbers)
 
