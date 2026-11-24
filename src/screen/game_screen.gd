@@ -297,6 +297,12 @@ func _build() -> void:
 	for d in range(1, 10):
 		var b := _button("", _on_palette.bind(d))
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.icon = Animals.texture(d)
+		b.expand_icon = true
+		b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		b.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
+		b.add_theme_constant_override("h_separation", 0)
+		b.add_theme_font_size_override("font_size", 22)
 		b.add_theme_color_override("font_color", Animals.ink(d))
 		b.add_theme_color_override("font_hover_color", Animals.ink(d))
 		b.add_theme_color_override("font_pressed_color", Animals.ink(d))
@@ -397,7 +403,7 @@ func _refresh() -> void:
 	var left := Rules.remaining(state) if state else PackedInt32Array([9, 9, 9, 9, 9, 9, 9, 9, 9])
 	for i in 9:
 		var b := _palette_buttons[i]
-		b.text = Animals.initial(i + 1) + (("\n%d" % left[i]) if _settings.animals_left else "")
+		b.text = ("%d" % left[i]) if _settings.animals_left else ""
 		b.modulate.a = 0.35 if _settings.animals_left and left[i] == 0 else 1.0
 	_undo.disabled = state == null or state.history.is_empty() or state.won
 	_erase.disabled = state == null or state.won
@@ -521,7 +527,8 @@ func _show_win(new_best: bool) -> void:
 	if not Rules.counts_for_best(state):
 		sheet.add_text(tr("WIN_HINTS_NOTE"))
 	var animal := posmod(state.seed, 9) + 1
-	var name_label := sheet.add_text(Animals.initial(animal) + "  " + tr(Animals.name_key(animal)))
+	sheet.add_image(Animals.texture(animal, true), 220)
+	var name_label := sheet.add_text(tr(Animals.name_key(animal)))
 	name_label.add_theme_color_override("font_color", Animals.ink(animal))
 	sheet.add_text(tr(Animals.fact_key(animal)))
 	sheet.add_button(tr("NEW_GAME"), _start.bind(state.difficulty))

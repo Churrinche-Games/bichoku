@@ -116,17 +116,16 @@ func _draw_highlights(s: float) -> void:
 				)
 
 
+## Where an animal's picture goes in a cell: givens fill more of it than entered animals (until
+## the givens' look is decided at the second art review).
+static func picture_rect(origin: Vector2, s: float, given: bool) -> Rect2:
+	var w := s * (0.84 if given else 0.7)
+	var size := Vector2(w, w * 196.0 / 200.0)
+	return Rect2(origin + (Vector2(s, s) - size) / 2, size)
+
+
 func _draw_animal(font: Font, origin: Vector2, s: float, digit: int, given: bool) -> void:
-	var text := Animals.initial(digit)
-	var font_size := int(s * (0.42 if text.length() > 1 else 0.55))
-	var width := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
-	var pos := origin + Vector2((s - width) / 2, s / 2 + font_size * 0.36)
-	var ink := Animals.ink(digit)
-	if given:
-		draw_string_outline(
-			font, pos, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, maxi(2, int(s * 0.05)), ink
-		)
-	draw_string(font, pos, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, ink)
+	draw_texture_rect(Animals.texture(digit), picture_rect(origin, s, given), false)
 	if show_numbers:
 		draw_string(
 			font,

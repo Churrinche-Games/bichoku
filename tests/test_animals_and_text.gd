@@ -69,3 +69,17 @@ func test_device_locale_fallback_is_english() -> void:
 	assert_eq(tr("TOOL_UNDO"), "Undo")
 	TranslationServer.set_locale("es_AR")
 	assert_eq(tr("TOOL_UNDO"), "Deshacer")
+
+
+func test_every_animal_has_a_texture() -> void:
+	for d in range(1, 10):
+		var simple := Animals.texture(d)
+		assert_not_null(simple, str(d))
+		assert_eq(simple.get_size(), Vector2(200, 196), str(d))
+		assert_string_contains(simple.resource_path, "%s-simple.svg" % Animals.id(d))
+		assert_not_null(Animals.texture(d, true), str(d))
+
+
+func test_full_drawing_falls_back_to_simple() -> void:
+	assert_string_contains(Animals.texture(3, true).resource_path, "pinguino-full.svg")
+	assert_string_contains(Animals.texture(1, true).resource_path, "yaguarete-simple.svg")

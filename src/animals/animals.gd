@@ -42,6 +42,15 @@ static func initial(digit: int) -> String:
 	return _INITIALS[digit - 1]
 
 
+## The animal's engraving: the simple level (board, palette), or the full level when asked and
+## drawn (falls back to simple until it exists).
+static func texture(digit: int, full: bool = false) -> Texture2D:
+	var base := "res://src/animals/art/%s-" % id(digit)
+	if full and ResourceLoader.exists(base + "full.svg"):
+		return load(base + "full.svg")
+	return load(base + "simple.svg")
+
+
 static func name_key(digit: int) -> String:
 	return "ANIMAL_%s_NAME" % String(id(digit)).to_upper()
 

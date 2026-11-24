@@ -122,3 +122,32 @@ func test_tabs_show_the_current_difficulty_after_asking() -> void:
 	assert_true(screen.is_confirm_open())
 	assert_false(hard.button_pressed, "hard not lit while asking")
 	assert_true(screen.tab_button(Difficulty.EASY).button_pressed)
+
+
+func test_palette_buttons_show_pictures() -> void:
+	_saved_game()
+	var screen := _screen()
+	for d in range(1, 10):
+		var b := screen.palette_button(d)
+		assert_eq(b.icon, Animals.texture(d))
+		assert_false(b.text.contains(Animals.initial(d)), b.text)
+
+
+func test_win_sheet_shows_the_animal() -> void:
+	var s := GameState.new_game(Difficulty.EASY, 11)
+	s.values = s.solution.duplicate()
+	var cell := -1
+	for c in 81:
+		if not s.puzzle[c]:
+			cell = c
+			break
+	s.values[cell] = 0
+	GameStore.new(PATH).save_game(s)
+	var screen := _screen()
+	screen.board.cell_pressed.emit(cell)
+	screen.palette_button(s.solution[cell]).pressed.emit()
+	assert_true(screen.state.won)
+	var animal := posmod(s.seed, 9) + 1
+	var pictures := _open_sheet_of(screen).find_children("*", "TextureRect", true, false)
+	var textures := pictures.map(func(p: TextureRect) -> Texture2D: return p.texture)
+	assert_has(textures, Animals.texture(animal, true))
