@@ -3,6 +3,7 @@
 //   icon.svg             the app icon (project icon, web favicon, Android launcher, Play icon)
 //   icon-foreground.svg  Android adaptive icon: the animal inside the 66 dp safe zone, transparent
 //   icon-background.svg  Android adaptive icon: paper and the board's grid
+//   icon-monochrome.svg  Android 13 themed icon: the animal's shape in one colour
 //   feature.svg          Play feature graphic, 1024×500 (the name is added by render_store.gd)
 //   sound-on.svg, sound-off.svg   the mute button's icons
 //   node tools/art/brand.mjs
@@ -60,6 +61,10 @@ writeFileSync(join(out, "icon.svg"), svg(512, 512, [paper, iconGrid, place(jagua
 
 // Adaptive icon (432 = 108 dp): the launcher masks to at most the central 66 dp (264 px).
 writeFileSync(join(out, "icon-foreground.svg"), svg(432, 432, place(jaguar, SIMPLE, 91, 93, 250)));
+// Android 13 themed icon: only the shape counts (the launcher tints it), so the paper parts become
+// see-through and the ink one solid colour.
+const mono = place(jaguar, SIMPLE, 91, 93, 250).replaceAll(`"${PAPER}"`, '"none"').replaceAll(`"${jaguar.ink}"`, `"${LINE}"`);
+writeFileSync(join(out, "icon-monochrome.svg"), svg(432, 432, mono));
 writeFileSync(join(out, "icon-background.svg"), svg(432, 432, [paper, board(-9, -9, 150, { givens: [4], inner: 7, outer: 0, color: GIVEN })].join("\n")));
 
 // Feature graphic: the nine animals on a 3×3 board on the right; the left half is left for the name.
@@ -77,4 +82,4 @@ const stroke = (d) => `<path d="${d}" fill="none" stroke="${LINE}" stroke-width=
 writeFileSync(join(out, "sound-on.svg"), svg(64, 64, [speaker, stroke("M41,24 Q46,32 41,40"), stroke("M47,17 Q57,32 47,47")].join("\n")));
 writeFileSync(join(out, "sound-off.svg"), svg(64, 64, [speaker, stroke("M42,24 L56,40 M56,24 L42,40")].join("\n")));
 
-console.log("wrote 6 SVGs to src/brand");
+console.log("wrote 7 SVGs to src/brand");

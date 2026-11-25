@@ -37,7 +37,7 @@ brand="$root/src/brand"
 node "$root/tools/art/brand.mjs" > /dev/null
 check test_brand_is_reproducible 'git -C "$root" diff --quiet -- src/brand && [ -z "$(git -C "$root" ls-files --others --exclude-standard -- src/brand)" ]'
 missing_brand=""
-for f in icon icon-foreground icon-background feature sound-on sound-off; do [ -f "$brand/$f.svg" ] || missing_brand+=" $f"; done
+for f in icon icon-foreground icon-background icon-monochrome feature sound-on sound-off; do [ -f "$brand/$f.svg" ] || missing_brand+=" $f"; done
 check test_brand_files_exist '[ -z "$missing_brand" ]'
 # Only the paper, the board's line and given shade, and the animals' inks.
 allowed=" #f1e6d6 #4a3b2e #e3d2ba none ${inks[*]} "

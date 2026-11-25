@@ -16,7 +16,7 @@ check test_itch_android '[ "$(echo "$presets" | grep -c "^\"Android itch\"|\"itc
 check test_same_package '[ "$(grep -c "^package/unique_name=\"com.churrinche.bichoku\"" "$cfg")" = 2 ]'
 # Both Android presets use the brand icon, never Godot's.
 icons_ok=1
-for key in main_192x192 adaptive_foreground_432x432 adaptive_background_432x432; do
+for key in main_192x192 adaptive_foreground_432x432 adaptive_background_432x432 adaptive_monochrome_432x432; do
   [ "$(grep -c "^launcher_icons/$key=\"res://src/brand/" "$cfg")" = 2 ] || icons_ok=0
 done
 check test_android_launcher_icons_are_ours '[ "$icons_ok" = 1 ]'
