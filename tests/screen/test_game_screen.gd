@@ -130,7 +130,7 @@ func test_palette_buttons_show_pictures() -> void:
 	for d in range(1, 10):
 		var b := screen.palette_button(d)
 		assert_eq(b.icon, Animals.texture(d))
-		assert_false(b.text.contains(Animals.initial(d)), b.text)
+		assert_true(b.text.is_valid_int(), b.text)
 
 
 func test_win_sheet_shows_the_animal() -> void:

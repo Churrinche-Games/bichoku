@@ -22,7 +22,6 @@ func test_inks_match_the_spec() -> void:
 	for d in range(1, 10):
 		assert_eq(Animals.ink(d), Color(expected[d - 1]), "digit %d" % d)
 	assert_eq(Animals.id(2), &"lobo_marino")
-	assert_eq(Animals.initial(6), "Yc")
 
 
 func _rows() -> Array[PackedStringArray]:

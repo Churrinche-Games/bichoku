@@ -1,6 +1,6 @@
 class_name BoardView
 extends Control
-## The 9x9 board: paper, lines, animals (placeholder initials in each animal's ink), notes as dots,
+## The 9x9 board: paper, lines, the animals' engravings (givens on a shaded cell), notes as dots,
 ## highlights for the selection, same animal and clashes (a faint red cell and a red ring).
 
 signal cell_pressed(cell: int)
@@ -12,6 +12,9 @@ const CLASH := Color("#c0392b")
 const CLASH_FILL := Color(CLASH, 0.14)
 ## The cells of the animals the puzzle starts with (Juan, art checkpoint 2).
 const GIVEN_FILL := Color("#e3d2ba")
+## Overlays: the selected cell, and the other cells of its row, column and box.
+const SELECTED := Color(LINE, 0.3)
+const RELATED := Color(LINE, 0.07)
 
 var state: GameState:
 	set(value):
@@ -76,11 +79,11 @@ func _draw() -> void:
 		return
 	for c in 81:
 		if state.puzzle[c]:
-			draw_rect(Rect2(Vector2(c % 9, c / 9) * s, Vector2(s, s)), GIVEN_FILL)
+			_fill_cell(c, s, GIVEN_FILL)
 	_draw_highlights(s)
 	var clashes := clash_cells()
 	for c in clashes:
-		draw_rect(Rect2(Vector2(c % 9, c / 9) * s, Vector2(s, s)), CLASH_FILL)
+		_fill_cell(c, s, CLASH_FILL)
 	var font := get_theme_default_font()
 	for cell in 81:
 		var origin := Vector2(cell % 9, cell / 9) * s
@@ -103,6 +106,10 @@ func _draw() -> void:
 	_draw_lines(s)
 
 
+func _fill_cell(cell: int, s: float, color: Color) -> void:
+	draw_rect(Rect2(Vector2(cell % 9, cell / 9) * s, Vector2(s, s)), color)
+
+
 func _draw_highlights(s: float) -> void:
 	var sel := state.selected
 	if sel < 0:
@@ -115,9 +122,9 @@ func _draw_highlights(s: float) -> void:
 		var c := cell % 9
 		var related := r == sel_row or c == sel_col or Vector2i(c / 3, r / 3) == box
 		if cell == sel:
-			draw_rect(Rect2(Vector2(c, r) * s, Vector2(s, s)), Color(LINE, 0.2))
+			draw_rect(Rect2(Vector2(c, r) * s, Vector2(s, s)), SELECTED)
 		elif related:
-			draw_rect(Rect2(Vector2(c, r) * s, Vector2(s, s)), Color(LINE, 0.07))
+			draw_rect(Rect2(Vector2(c, r) * s, Vector2(s, s)), RELATED)
 	var v := state.values[sel]
 	if v:
 		for cell in 81:

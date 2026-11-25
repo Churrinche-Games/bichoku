@@ -276,5 +276,3 @@ export const ANIMALS = [
   { id: "guanaco", ink: "#93683c", draw: guanaco },
   { id: "ballena", ink: "#2a6a6e", draw: ballena },
 ];
-
-

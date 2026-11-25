@@ -48,6 +48,8 @@
 
 ### Task B2: the game shows the pictures
 
+> Superseded at checkpoint 2: every animal is 84% of the cell, givens sit on a shaded cell, full drawings import at `svg/scale=3`, the win picture is 220 units.
+
 **Files:** Modify `src/animals/animals.gd` (`static func texture(digit, full := false) -> Texture2D`, full falls back to simple), `src/board/board_view.gd` (draw textures: givens fill 84% of the cell, entered 70%; notes unchanged), `src/screen/game_screen.gd` (palette buttons: icon above the count, `expand_icon`; win sheet shows the full drawing, 200 units); `.import` settings for the SVGs: `svg/scale = 1.0`, mipmaps on.
 
 - [ ] Tests: `test_every_animal_has_a_texture` (both levels non-null, size 200×196), `test_palette_buttons_show_pictures` (icon set, text is only the count), `test_win_sheet_shows_the_animal` (a TextureRect with the animal's full texture). Commit "Show the animals on the board, the palette and the win screen".
@@ -72,3 +74,9 @@
 - **Inks:** the board with the current inks and with a proposal that separates the two browns (lobo marino darker and cooler, guanaco warmer); a contact sheet of both.
 - **Givens vs entered:** two treatments on the same board — A: size (givens 84%, entered 70%, today); B: same size, givens on a shaded cell. Each with a clash, a selection and notes.
 - Juan picks; the choice becomes Task C3 (inks in `animals.gd`, `animals.mjs` and the spec's table; the givens treatment in `BoardView` with a test).
+
+### Task C3: Juan's checkpoint-2 choices (done)
+
+- Inks: lobo marino `#4f4f55`, guanaco `#93683c` (`animals.gd`, `animals.mjs`, the spec's table).
+- Givens: same size as entered animals (84%), on a shaded cell `#e3d2ba`; the selection overlay strengthened to 0.3 so it stands out next to givens (`test_the_selection_stands_out_from_givens_around_it`).
+- Clashes: a faint red fill (`CLASH_FILL`, alpha 0.14) under the red ring; no "wrong against the solution" mode in the first release.

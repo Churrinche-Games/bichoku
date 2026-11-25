@@ -26,8 +26,6 @@ const _INKS := [
 	"#93683c",
 	"#2a6a6e"
 ]
-## Placeholders until the engraved drawings exist.
-const _INITIALS := ["Y", "L", "P", "C", "H", "Yc", "F", "G", "B"]
 
 
 static func id(digit: int) -> StringName:
@@ -36,10 +34,6 @@ static func id(digit: int) -> StringName:
 
 static func ink(digit: int) -> Color:
 	return Color(_INKS[digit - 1])
-
-
-static func initial(digit: int) -> String:
-	return _INITIALS[digit - 1]
 
 
 ## The animal's engraving: the simple level (board, palette), or the full level when asked and

@@ -24,8 +24,15 @@ func test_every_animal_is_drawn_at_the_same_size() -> void:
 func test_givens_sit_on_a_darker_cell() -> void:
 	assert_lt(BoardView.GIVEN_FILL.v, BoardView.PAPER.v)
 	# Lighter than the selected cell's highlight, so the selection still stands out.
-	var selected := BoardView.PAPER.lerp(BoardView.LINE, 0.2)
+	var selected := BoardView.PAPER.blend(BoardView.SELECTED)
 	assert_gt(BoardView.GIVEN_FILL.v, selected.v)
+
+
+func test_the_selection_stands_out_from_givens_around_it() -> void:
+	# An empty selected cell next to givens in its row, column or box (review, checkpoint 2).
+	var selected := BoardView.PAPER.blend(BoardView.SELECTED)
+	var given_related := BoardView.GIVEN_FILL.blend(BoardView.RELATED)
+	assert_gt(given_related.v - selected.v, 0.05)
 
 
 func test_same_animal_underline_is_below_the_pictures() -> void:
