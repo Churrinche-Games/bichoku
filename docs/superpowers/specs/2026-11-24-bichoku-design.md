@@ -51,16 +51,16 @@ Bichoku is a 9×9 sudoku where the nine symbols are Argentine animals instead of
 
 Digit `d` is animal `d`. The carpincho is replaced by the **lobo marino** (Juan, 2026-11-24); everything else is the web version's set.
 
-| # | Animal | Ink (first proposal) | Pose note |
+| # | Animal | Ink | Pose note |
 |---|---|---|---|
 | 1 | Yaguareté (cub) | gold `#b07d1c` | |
-| 2 | **Lobo marino** (sea lion pup) | grey-brown `#6b5a4e` | Upright on its front flippers, head raised, so it doesn't read like the penguin or the whale |
+| 2 | **Lobo marino** (sea lion pup) | charcoal `#4f4f55` (checkpoint 2) | Upright on its front flippers, head raised, so it doesn't read like the penguin or the whale |
 | 3 | Pingüino de Magallanes | blue `#2f4a5c` | Drawn (kit art study) |
 | 4 | Cóndor andino (chick) | violet `#5b3f8c` | |
 | 5 | Hornero (chick) | terracotta `#b5532a` | Drawn (kit art study) |
 | 6 | Yacaré (hatchling) | green `#3d6b4f` | |
 | 7 | Flamenco austral (chick) | magenta `#9c3d6b` | |
-| 8 | Guanaco (chulengo) | khaki `#7d6b4a` | |
+| 8 | Guanaco (chulengo) | cinnamon `#93683c` (checkpoint 2) | |
 | 9 | Ballena franca austral (calf's tail) | teal `#2a6a6e` | |
 
 - Names, English names and facts come from the web version's `animals.ts`; the lobo marino gets a new fact (Spanish and English), e.g. its colonies at Península Valdés and Puerto Madryn.
@@ -109,7 +109,7 @@ One portrait column (viewport 720×1280, stretch `canvas_items`, aspect `expand`
  [↶ Deshacer] [⌫ Borrar] [✎ Notas] [💡 Pista]
 ```
 
-- **Board:** cream paper, thin ink lines, thicker lines around the 3×3 boxes. Each animal in its own ink (simple level). Givens and entered animals must look different (exact treatment decided at the palette review).
+- **Board:** cream paper, thin ink lines, thicker lines around the 3×3 boxes. Each animal in its own ink (simple level), all at the same size. Givens sit on a slightly darker paper cell `#e3d2ba` (Juan, checkpoint 2).
 - **Highlights:** the selected cell gets a soft fill and its row, column and box a lighter one; cells with the same animal as the selection get an underline (my call); clashes a red ring.
 - **Notes:** a dot in the animal's ink at the animal's fixed spot of a 3×3 mini grid (1 top left … 9 bottom right). With "show numbers" on, the dots become small digits.
 - **Help (?)** explains the rules and the controls. **Settings (⚙)** holds the settings above plus entries for About, Feedback and (itch build only) Support.
@@ -167,4 +167,6 @@ The portfolio's release process, in order: signed AAB with Play App Signing; web
 - **2026-11-24 Language:** follows the device on first launch (Spanish or English); settings override.
 - **2026-11-24 Sound settings:** music and effects toggles in the settings menu.
 - **2026-11-24 Screen sizes:** portrait column, square board as large as fits, centred column on wide screens (see Screen sizes).
+- **2026-11-24 Art checkpoint 1:** shapes approved after three revisions (yaguareté muzzle and nose; a plump lobo marino after the Mar del Plata statue; a young cóndor with spread wings instead of a chick).
+- **2026-11-24 Art checkpoint 2:** lobo marino ink charcoal `#4f4f55`, guanaco cinnamon `#93683c`; givens on a shaded cell, every animal the same size.
 - **2026-11-24 Release split:** the plan ends at a release candidate; account steps go through `release-game` with Juan (proposed, see Store and release).

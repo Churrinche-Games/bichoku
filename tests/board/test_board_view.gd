@@ -12,20 +12,25 @@ func test_cell_at_corners_and_outside() -> void:
 	assert_eq(view.cell_at(Vector2(10, 631)), -1)
 
 
-func test_entered_animals_are_drawn_smaller_than_givens() -> void:
+func test_every_animal_is_drawn_at_the_same_size() -> void:
 	var origin := Vector2(80, 160)
-	var given := BoardView.picture_rect(origin, 80.0, true)
-	var entered := BoardView.picture_rect(origin, 80.0, false)
-	assert_gt(given.size.x, entered.size.x)
-	for r: Rect2 in [given, entered]:
-		assert_almost_eq(r.get_center(), origin + Vector2(40, 40), Vector2(0.5, 0.5))
-		assert_almost_eq(r.size.x / r.size.y, 200.0 / 196.0, 0.01)
-		assert_true(Rect2(origin, Vector2(80, 80)).encloses(r))
+	var r := BoardView.picture_rect(origin, 80.0)
+	assert_almost_eq(r.get_center(), origin + Vector2(40, 40), Vector2(0.5, 0.5))
+	assert_almost_eq(r.size.x, 80.0 * 0.84, 0.01)
+	assert_almost_eq(r.size.x / r.size.y, 200.0 / 196.0, 0.01)
+	assert_true(Rect2(origin, Vector2(80, 80)).encloses(r))
+
+
+func test_givens_sit_on_a_darker_cell() -> void:
+	assert_lt(BoardView.GIVEN_FILL.v, BoardView.PAPER.v)
+	# Lighter than the selected cell's highlight, so the selection still stands out.
+	var selected := BoardView.PAPER.lerp(BoardView.LINE, 0.2)
+	assert_gt(BoardView.GIVEN_FILL.v, selected.v)
 
 
 func test_same_animal_underline_is_below_the_pictures() -> void:
 	var origin := Vector2(80, 160)
-	assert_gt(BoardView.underline_y(origin, 80.0), BoardView.picture_rect(origin, 80.0, true).end.y)
+	assert_gt(BoardView.underline_y(origin, 80.0), BoardView.picture_rect(origin, 80.0).end.y)
 	assert_lt(BoardView.underline_y(origin, 80.0), origin.y + 80.0)
 
 

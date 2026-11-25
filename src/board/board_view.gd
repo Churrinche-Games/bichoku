@@ -8,6 +8,8 @@ signal cell_pressed(cell: int)
 const PAPER := Color("#f1e6d6")
 const LINE := Color("#4a3b2e")
 const CLASH := Color("#c0392b")
+## The cells of the animals the puzzle starts with (Juan, art checkpoint 2).
+const GIVEN_FILL := Color("#e3d2ba")
 
 var state: GameState:
 	set(value):
@@ -63,6 +65,9 @@ func _draw() -> void:
 	if state == null:
 		_draw_lines(s)
 		return
+	for c in 81:
+		if state.puzzle[c]:
+			draw_rect(Rect2(Vector2(c % 9, c / 9) * s, Vector2(s, s)), GIVEN_FILL)
 	_draw_highlights(s)
 	var clashes := Rules.conflicts(state) if mark_clashes else PackedInt32Array()
 	var font := get_theme_default_font()
@@ -70,7 +75,7 @@ func _draw() -> void:
 		var origin := Vector2(cell % 9, cell / 9) * s
 		var v := state.values[cell]
 		if v:
-			_draw_animal(font, origin, s, v, state.puzzle[cell] != 0)
+			_draw_animal(font, origin, s, v)
 			if cell in clashes:
 				draw_arc(
 					origin + Vector2(s, s) / 2,
@@ -121,16 +126,15 @@ static func underline_y(origin: Vector2, s: float) -> float:
 	return origin.y + s * 0.94
 
 
-## Where an animal's picture goes in a cell: givens fill more of it than entered animals (until
-## the givens' look is decided at the second art review).
-static func picture_rect(origin: Vector2, s: float, given: bool) -> Rect2:
-	var w := s * (0.84 if given else 0.7)
+## Where an animal's picture goes in a cell (the same for givens and entered animals).
+static func picture_rect(origin: Vector2, s: float) -> Rect2:
+	var w := s * 0.84
 	var size := Vector2(w, w * 196.0 / 200.0)
 	return Rect2(origin + (Vector2(s, s) - size) / 2, size)
 
 
-func _draw_animal(font: Font, origin: Vector2, s: float, digit: int, given: bool) -> void:
-	draw_texture_rect(Animals.texture(digit), picture_rect(origin, s, given), false)
+func _draw_animal(font: Font, origin: Vector2, s: float, digit: int) -> void:
+	draw_texture_rect(Animals.texture(digit), picture_rect(origin, s), false)
 	if show_numbers:
 		draw_string(
 			font,

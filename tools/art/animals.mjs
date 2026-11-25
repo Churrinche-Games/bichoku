@@ -267,13 +267,13 @@ function ballena(dr, ink) {
 /** Digit order matches src/animals/animals.gd. */
 export const ANIMALS = [
   { id: "yaguarete", ink: "#b07d1c", draw: yaguarete },
-  { id: "lobo_marino", ink: "#6b5a4e", draw: lobo },
+  { id: "lobo_marino", ink: "#4f4f55", draw: lobo },
   { id: "pinguino", ink: "#2f4a5c", draw: pinguino },
   { id: "condor", ink: "#5b3f8c", draw: condor },
   { id: "hornero", ink: "#b5532a", draw: hornero },
   { id: "yacare", ink: "#3d6b4f", draw: yacare },
   { id: "flamenco", ink: "#9c3d6b", draw: flamenco },
-  { id: "guanaco", ink: "#7d6b4a", draw: guanaco },
+  { id: "guanaco", ink: "#93683c", draw: guanaco },
   { id: "ballena", ink: "#2a6a6e", draw: ballena },
 ];
 

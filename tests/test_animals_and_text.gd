@@ -10,13 +10,13 @@ func after_each() -> void:
 func test_inks_match_the_spec() -> void:
 	var expected := [
 		"#b07d1c",
-		"#6b5a4e",
+		"#4f4f55",
 		"#2f4a5c",
 		"#5b3f8c",
 		"#b5532a",
 		"#3d6b4f",
 		"#9c3d6b",
-		"#7d6b4a",
+		"#93683c",
 		"#2a6a6e"
 	]
 	for d in range(1, 10):
