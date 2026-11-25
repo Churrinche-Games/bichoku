@@ -1,13 +1,15 @@
 class_name BoardView
 extends Control
 ## The 9x9 board: paper, lines, animals (placeholder initials in each animal's ink), notes as dots,
-## highlights for the selection, same animal and clashes.
+## highlights for the selection, same animal and clashes (a faint red cell and a red ring).
 
 signal cell_pressed(cell: int)
 
 const PAPER := Color("#f1e6d6")
 const LINE := Color("#4a3b2e")
 const CLASH := Color("#c0392b")
+## Under a clashing animal, with the ring around it (Juan, art checkpoint 2).
+const CLASH_FILL := Color(CLASH, 0.14)
 ## The cells of the animals the puzzle starts with (Juan, art checkpoint 2).
 const GIVEN_FILL := Color("#e3d2ba")
 
@@ -59,6 +61,13 @@ func _gui_input(event: InputEvent) -> void:
 			accept_event()
 
 
+## The cells marked as clashing: every repeated animal, or none when the setting is off.
+func clash_cells() -> PackedInt32Array:
+	if state == null or not mark_clashes:
+		return PackedInt32Array()
+	return Rules.conflicts(state)
+
+
 func _draw() -> void:
 	var s := cell_size()
 	draw_rect(Rect2(Vector2.ZERO, Vector2(s * 9, s * 9)), PAPER)
@@ -69,7 +78,9 @@ func _draw() -> void:
 		if state.puzzle[c]:
 			draw_rect(Rect2(Vector2(c % 9, c / 9) * s, Vector2(s, s)), GIVEN_FILL)
 	_draw_highlights(s)
-	var clashes := Rules.conflicts(state) if mark_clashes else PackedInt32Array()
+	var clashes := clash_cells()
+	for c in clashes:
+		draw_rect(Rect2(Vector2(c % 9, c / 9) * s, Vector2(s, s)), CLASH_FILL)
 	var font := get_theme_default_font()
 	for cell in 81:
 		var origin := Vector2(cell % 9, cell / 9) * s

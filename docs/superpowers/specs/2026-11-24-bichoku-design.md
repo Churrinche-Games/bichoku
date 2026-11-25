@@ -76,7 +76,7 @@ Same rules as the web version (port `~/src/sudoku/src/features/game/game.ts`):
 
 - Pure state: `update(state, action)` with select, input, erase, undo, hint, toggle notes, tick. Givens never change; nothing changes after a win.
 - **Notes:** in notes mode, tapping animals toggles marks in the cell. Placing an animal clears that cell's notes and removes the animal from the notes of every cell in its row, column and box.
-- **Clashes:** a cell whose animal repeats in its row, column or box gets a red ring. Never compares against the solution. Can be turned off.
+- **Clashes:** a cell whose animal repeats in its row, column or box gets a faint red fill and a red ring (Juan, checkpoint 2; the ring keeps it readable without color). Never compares against the solution, and there is no "wrong against the solution" mode in the first release (Juan). Can be turned off.
 - **Hint:** fills the selected cell if it is empty or wrong; otherwise fixes a wrong cell, or else fills the empty cell with the fewest options. Limited per game: Easy 3, Medium 2, Hard 1.
 - **Difficulty** by clue count: Easy stops removing clues at 40, Medium at 32, Hard removes as many as it can (about 24).
 - **Best time** per difficulty, only for games solved without hints; the win screen says so when hints were used.
@@ -110,7 +110,7 @@ One portrait column (viewport 720×1280, stretch `canvas_items`, aspect `expand`
 ```
 
 - **Board:** cream paper, thin ink lines, thicker lines around the 3×3 boxes. Each animal in its own ink (simple level), all at the same size. Givens sit on a slightly darker paper cell `#e3d2ba` (Juan, checkpoint 2).
-- **Highlights:** the selected cell gets a soft fill and its row, column and box a lighter one; cells with the same animal as the selection get an underline (my call); clashes a red ring.
+- **Highlights:** the selected cell gets a soft fill and its row, column and box a lighter one; cells with the same animal as the selection get an underline (my call); clashes a faint red fill and a red ring.
 - **Notes:** a dot in the animal's ink at the animal's fixed spot of a 3×3 mini grid (1 top left … 9 bottom right). With "show numbers" on, the dots become small digits.
 - **Help (?)** explains the rules and the controls. **Settings (⚙)** holds the settings above plus entries for About, Feedback and (itch build only) Support.
 - Android back button closes an open dialog, else asks before leaving. The game pauses (clock stops) when the app goes to the background.

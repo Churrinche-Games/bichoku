@@ -39,3 +39,23 @@ func test_pictures_are_sampled_with_mipmaps() -> void:
 	assert_eq(
 		ProjectSettings.get_setting("rendering/textures/canvas_textures/default_texture_filter"), 2
 	)
+
+
+func test_clashing_cells_are_tinted_in_the_clash_red() -> void:
+	assert_eq(Color(BoardView.CLASH_FILL, 1.0), BoardView.CLASH)
+	# Faint, so the animal and the shaded given cell still read through it (Juan, checkpoint 2).
+	assert_between(BoardView.CLASH_FILL.a, 0.1, 0.2)
+
+
+func test_clash_cells_follow_the_setting() -> void:
+	var view: BoardView = autofree(BoardView.new())
+	var blank := PackedInt32Array()
+	blank.resize(81)
+	var state := GameState.create(blank, blank, &"easy", 1)
+	state.values[0] = 3
+	state.values[1] = 3
+	view.state = state
+	assert_eq(view.clash_cells(), Rules.conflicts(state))
+	assert_true(0 in view.clash_cells() and 1 in view.clash_cells())
+	view.mark_clashes = false
+	assert_eq(view.clash_cells(), PackedInt32Array())
