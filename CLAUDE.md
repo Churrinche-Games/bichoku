@@ -19,6 +19,7 @@ A small, free, open-source, Argentine-themed game by Churrinche Games, made with
 
 ```sh
 tools/check.sh   # everything: import, GUT tests, shell tests, lint, format. Must pass before work is done.
+tools/store.sh   # store graphics and screenshots into build/store, then checks them (opens a window)
 ```
 
 GUT exits 0 when a test script fails to parse, so use `tools/check.sh`, not bare GUT, to call something done.
@@ -43,7 +44,9 @@ src/i18n/strings.csv   the game's interface text, es and en; shared KIT_* string
 game_info.cfg          name, repo, feedback email, donation links for the kit pages (exported via include_filter)
 tests/                 GUT tests mirroring src/; tests/engine/fixtures.json from the web engine
 tools/fixtures/        make_engine_fixtures.mjs: rebuild the fixtures (Node 26, needs ~/src/sudoku)
-tools/art/             animals.mjs (the nine drawings), build.mjs, contact_sheet.gd (review sheet PNG)
+tools/art/             animals.mjs (the nine drawings), build.mjs, contact_sheet.gd (review sheet PNG),
+                       brand.mjs (src/brand: icons, feature graphic), render_store.gd (store PNGs)
+tools/shots/           screenshots.gd (store screenshots, any size and language)
 tools/sound/           build.mjs (effects and music)
 docs/store/, docs/privacy-policy.md, docs/release-checklist.md   listing texts, policy, Juan's release steps
 addons/churrinche_kit/ the kit (vendored, see Repo)
