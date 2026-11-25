@@ -88,6 +88,12 @@
 - Screenshot sizes: 1080×1920 (phone, and Play's tablet slots), 1080×2160 (Play allows at most 2:1, so not 1080×2400), 1536×2048 (4:3 tablet in portrait: the game is portrait-locked), 1280×720 (the web build's window).
 - `build/` has a `.gdignore` and every preset excludes `build/*` (store PNGs were being packed into exports).
 
+### As built (R4)
+
+- Juan approved setting the Java SDK path (Homebrew `openjdk@17`) in his Godot editor settings and the Gradle download (2026-11-25).
+- `android/` is ignored and installed by `tools/export.sh aab`; the Play preset is a Gradle AAB (targetSdk 36), the itch APK stays a plain template export.
+- Both Android presets have our own themed (monochrome) icon; Godot's default was being used.
+
 ### Task R5: final review
 
 - Fresh review of part 2; the release checklist names every remaining step that needs Juan.

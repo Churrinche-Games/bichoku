@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
-# Exports the itch.io builds into build/ (no Gradle; debug-signed APK, the release key is Juan's):
+# Exports the builds into build/ (debug-signed; the release key is Juan's):
 #   tools/export.sh web        build/web/index.html (+ .pck, .wasm, .js): zip the folder for itch
 #   tools/export.sh itch-apk   build/itch/bichoku.apk
+#   tools/export.sh aab        build/android/bichoku.aab, the Play build (Gradle; debug-signed here,
+#                              Juan signs the release with his upload key). Installs the Android
+#                              build template into android/ (ignored by git) if it is missing; the
+#                              first run downloads Gradle into ~/.gradle.
 # Then checks what it built.
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
@@ -27,5 +31,14 @@ case "${1:-}" in
     done
     echo "ok   build/itch/bichoku.apk ($(du -h build/itch/bichoku.apk | cut -f1))"
     ;;
-  *) echo "usage: tools/export.sh web|itch-apk" >&2; exit 2 ;;
+  aab)
+    rm -rf "${root:?}/build/android" && mkdir -p build/android
+    template=()
+    [ -d android/build ] || template=(--install-android-build-template)
+    "$GODOT" --headless "${template[@]}" --export-debug Android build/android/bichoku.aab
+    [ -s build/android/bichoku.aab ] || { echo "no AAB written" >&2; exit 1; }
+    grep -q "base/manifest/AndroidManifest.xml" <<< "$(unzip -l build/android/bichoku.aab)" || { echo "AAB lacks its manifest" >&2; exit 1; }
+    echo "ok   build/android/bichoku.aab ($(du -h build/android/bichoku.aab | cut -f1))"
+    ;;
+  *) echo "usage: tools/export.sh web|itch-apk|aab" >&2; exit 2 ;;
 esac
