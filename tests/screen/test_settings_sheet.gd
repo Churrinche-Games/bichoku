@@ -72,13 +72,13 @@ func test_support_shown_for_itch_with_links() -> void:
 	assert_not_null(_button_in(_open_sheet_of(screen), "Ko-fi"))
 
 
-func test_feedback_shows_issues_link() -> void:
+func test_feedback_shows_issues_link_and_email() -> void:
 	_saved_game()
 	var screen := _screen()
 	_button_in(_press_settings(screen), "Feedback").pressed.emit()
 	var sheet := _open_sheet_of(screen)
 	assert_not_null(_button_in(sheet, "Open an issue on GitHub"))
-	assert_null(_button_in(sheet, "Send an email"))
+	assert_not_null(_button_in(sheet, "Send an email"))
 
 
 func test_sound_settings_default() -> void:

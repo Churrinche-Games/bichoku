@@ -11,7 +11,7 @@ Bichoku es un juego de Churrinche Games. **Bichoku no recopila, no guarda en ser
 - La partida en curso, los mejores tiempos y los ajustes se guardan solo en tu dispositivo. Si desinstalás el juego, se borran.
 - Si nos escribís por email o en GitHub, usamos tu mensaje solo para responderte.
 
-Contacto: {{FEEDBACK_EMAIL}}
+Contacto: churrinchegames@gmail.com
 
 ## English
 
@@ -22,4 +22,4 @@ Bichoku is a game by Churrinche Games. **Bichoku does not collect, store on serv
 - Your game in progress, best times and settings are saved only on your device. Uninstalling the game deletes them.
 - If you write to us by email or on GitHub, we use your message only to reply.
 
-Contact: {{FEEDBACK_EMAIL}}
+Contact: churrinchegames@gmail.com
