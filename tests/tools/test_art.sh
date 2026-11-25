@@ -31,4 +31,27 @@ for i in "${!ids[@]}"; do
   done
 done
 check test_inks_match_animals_gd '[ "${#inks[@]}" = 9 ] && [ -z "$bad" ]'
+
+# The brand art (app icon, Android adaptive icon layers, feature graphic), by tools/art/brand.mjs.
+brand="$root/src/brand"
+node "$root/tools/art/brand.mjs" > /dev/null
+check test_brand_is_reproducible 'git -C "$root" diff --quiet -- src/brand && [ -z "$(git -C "$root" ls-files --others --exclude-standard -- src/brand)" ]'
+missing_brand=""
+for f in icon icon-foreground icon-background feature; do [ -f "$brand/$f.svg" ] || missing_brand+=" $f"; done
+check test_brand_files_exist '[ -z "$missing_brand" ]'
+# Only the paper, the board's line and given shade, and the animals' inks.
+allowed=" #f1e6d6 #4a3b2e #e3d2ba none ${inks[*]} "
+bad_brand=""
+for f in "$brand"/*.svg; do
+  for c in $(grep -oE '(fill|stroke)="[^"]+"' "$f" | sed -E 's/.*="([^"]+)"/\1/' | sort -u); do
+    case "$allowed" in *" $c "*) ;; *) bad_brand+=" $(basename "$f"):$c" ;; esac
+  done
+done
+check test_brand_uses_the_palette '[ -z "$bad_brand" ]'
+# The icon and the feature graphic are opaque (Play rejects transparency): a paper rect fills them.
+opaque=""
+for f in icon icon-background feature; do
+  grep -q '<rect x="0" y="0" width="100%" height="100%" fill="#f1e6d6"/>' "$brand/$f.svg" 2>/dev/null || opaque+=" $f"
+done
+check test_brand_backgrounds_are_opaque '[ -z "$opaque" ]'
 exit "$fail"
