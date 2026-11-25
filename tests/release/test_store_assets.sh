@@ -20,7 +20,7 @@ for lang in es-419 en-US; do expect "$dir/feature-$lang.png" 1024 500; done
 check test_icon_and_feature_graphics '[ -z "$bad" ]'
 bad=""
 for lang in es-419 en-US; do
-  for size in 1080x1920 1080x2400 1600x1200 1280x720; do
+  for size in 1080x1920 1080x2160 1536x2048 1280x720; do
     for scene in board notes win settings; do
       expect "$dir/screenshots/$lang/$size-$scene.png" "${size%x*}" "${size#*x}"
     done

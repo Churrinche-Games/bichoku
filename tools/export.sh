@@ -7,12 +7,15 @@ set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 GODOT="${GODOT:-/Applications/Godot.app/Contents/MacOS/Godot}"
 cd "$root"
+# Godot must never import or export build outputs.
+mkdir -p build && touch build/.gdignore
 case "${1:-}" in
   web)
     rm -rf "${root:?}/build/web" && mkdir -p build/web
     "$GODOT" --headless --export-release Web build/web/index.html
     for f in index.html index.pck index.wasm index.js; do [ -s "build/web/$f" ] || { echo "missing build/web/$f" >&2; exit 1; }; done
-    (cd build && rm -f bichoku-web.zip && zip -qr bichoku-web.zip web)
+    # itch wants index.html at the zip's root.
+    (cd build/web && rm -f ../bichoku-web.zip && zip -qr ../bichoku-web.zip .)
     echo "ok   build/web and build/bichoku-web.zip"
     ;;
   itch-apk)

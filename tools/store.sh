@@ -6,6 +6,8 @@ set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 GODOT="${GODOT:-/Applications/Godot.app/Contents/MacOS/Godot}"
 out="$root/build/store"
+# Godot must never import or export build outputs.
+mkdir -p "$root/build" && touch "$root/build/.gdignore"
 rm -rf "${out:?}"
 node "$root/tools/art/brand.mjs" > /dev/null
 "$GODOT" --path "$root" -s tools/art/render_store.gd -- "$out"

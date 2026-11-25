@@ -7,8 +7,11 @@ extends SceneTree
 
 const BASE := Vector2(720, 1280)
 const SCENES: Array[StringName] = [&"board", &"notes", &"win", &"settings"]
+## Phone 9:16 (also Play's tablet slots), a tall phone at Play's 2:1 limit (the long side may be at
+## most twice the short one), a 4:3 tablet in portrait (the game is portrait-locked), and the
+## 16:9 desktop window of the web build.
 const SIZES: Array[Vector2i] = [
-	Vector2i(1080, 1920), Vector2i(1080, 2400), Vector2i(1600, 1200), Vector2i(1280, 720)
+	Vector2i(1080, 1920), Vector2i(1080, 2160), Vector2i(1536, 2048), Vector2i(1280, 720)
 ]
 const DIR := "user://shots"
 
@@ -30,7 +33,8 @@ func _initialize() -> void:
 	_run.call_deferred(out, lang, sizes)
 
 
-## The canvas size Godot gives a window of this size (stretch aspect "expand" from BASE).
+## The canvas size Godot gives a window of this size (stretch aspect "expand" from BASE), rounded
+## to whole units (Godot keeps the fraction; the difference is under a pixel).
 static func canvas_for(pixels: Vector2i) -> Vector2i:
 	var scale := minf(pixels.x / BASE.x, pixels.y / BASE.y)
 	return Vector2i((Vector2(pixels) / scale).round())

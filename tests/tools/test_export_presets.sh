@@ -25,5 +25,6 @@ trap 'rm -rf "$work"' EXIT
 GODOT="${GODOT:-/Applications/Godot.app/Contents/MacOS/Godot}"
 (cd "$root" && "$GODOT" --headless --export-pack Web "$work/web.pck" > "$work/out" 2>&1)
 strings "$work/web.pck" > "$work/web.txt" 2> /dev/null
+check test_exports_skip_the_build_folder '! grep -q "build/" "$work/web.txt" && [ "$(grep -c "^exclude_filter=\"[^\"]*build/\*" "$cfg")" = 3 ]'
 check test_web_export_ships_game_info 'grep -q "game_info.cfg" "$work/web.txt" && grep -q "repo_url" "$work/web.txt"'
 exit "$fail"

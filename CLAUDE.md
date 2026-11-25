@@ -19,7 +19,9 @@ A small, free, open-source, Argentine-themed game by Churrinche Games, made with
 
 ```sh
 tools/check.sh   # everything: import, GUT tests, shell tests, lint, format. Must pass before work is done.
-tools/store.sh   # store graphics and screenshots into build/store, then checks them (opens a window)
+tools/store.sh   # store graphics and screenshots into build/store, then checks them (opens a window;
+                 # the check is tests/release/test_store_assets.sh, outside check.sh)
+tools/export.sh web|itch-apk   # the itch builds into build/ (the APK needs the Java SDK path in Godot)
 ```
 
 GUT exits 0 when a test script fails to parse, so use `tools/check.sh`, not bare GUT, to call something done.

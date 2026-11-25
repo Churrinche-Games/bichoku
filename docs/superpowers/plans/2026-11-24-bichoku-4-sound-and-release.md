@@ -81,6 +81,13 @@
 
 - Install the Android build template (`android/` from the export templates; `android/build/` gitignored per Godot's convention or committed — decided then), `gradle_build/use_gradle_build=true`, `gradle_build/export_format=1` (AAB) for the Play preset, debug-signed locally. Release signing is Juan's (checklist).
 
+### As built (R1–R3)
+
+- `render_store.gd` and `screenshots.gd` need a window (text needs a renderer), so the store assets are checked by `tests/release/test_store_assets.sh`, run by `tools/store.sh` (sizes, no alpha, not blank), not by `check.sh`; the planned in-check render tests were dropped for that reason.
+- Feature graphics: `feature-es-419.png` and `feature-en-US.png` (the name and a tagline per listing language); the script fails if the text reaches the board.
+- Screenshot sizes: 1080×1920 (phone, and Play's tablet slots), 1080×2160 (Play allows at most 2:1, so not 1080×2400), 1536×2048 (4:3 tablet in portrait: the game is portrait-locked), 1280×720 (the web build's window).
+- `build/` has a `.gdignore` and every preset excludes `build/*` (store PNGs were being packed into exports).
+
 ### Task R5: final review
 
 - Fresh review of part 2; the release checklist names every remaining step that needs Juan.

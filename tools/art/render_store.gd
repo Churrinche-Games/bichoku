@@ -13,6 +13,7 @@ const TAGLINES := {"es-419": "Sudoku de bichos argentinos", "en-US": "Sudoku wit
 var _out := "build/store"
 var _frames := 0
 var _views: Dictionary = {}
+var _failed := false
 
 
 func _initialize() -> void:
@@ -38,6 +39,7 @@ func _process(_delta: float) -> bool:
 		var image: Image = _views[lang].get_texture().get_image()
 		_opaque(image).save_png(_out.path_join("feature-%s.png" % lang))
 	print("wrote the store graphics to ", _out)
+	quit(1 if _failed else 0)
 	return true
 
 
@@ -76,8 +78,14 @@ func _feature(tagline: String) -> SubViewport:
 	view.add_child(title)
 	var sub := Label.new()
 	sub.text = tagline
-	sub.add_theme_font_size_override("font_size", 34)
+	sub.add_theme_font_size_override("font_size", 30)
 	sub.add_theme_color_override("font_color", LINE)
 	sub.position = Vector2(62, 300)
 	view.add_child(sub)
+	# The name and the tagline stay clear of the board (it starts at x = 560).
+	for label: Label in [title, sub]:
+		var right := label.position.x + label.get_minimum_size().x
+		if right > 536:
+			push_error("feature graphic: '%s' reaches x = %d, into the board" % [label.text, right])
+			_failed = true
 	return view
