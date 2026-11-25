@@ -112,7 +112,7 @@ One portrait column (viewport 720×1280, stretch `canvas_items`, aspect `expand`
 - **Board:** cream paper, thin ink lines, thicker lines around the 3×3 boxes. Each animal in its own ink (simple level), all at the same size. Givens sit on a slightly darker paper cell `#e3d2ba` (Juan, checkpoint 2).
 - **Highlights:** the selected cell gets a soft fill and its row, column and box a lighter one; cells with the same animal as the selection get an underline (my call); clashes a faint red fill and a red ring.
 - **Notes:** a dot in the animal's ink at the animal's fixed spot of a 3×3 mini grid (1 top left … 9 bottom right). With "show numbers" on, the dots become small digits.
-- **Help (?)** explains the rules and the controls. **Settings (⚙)** holds the settings above plus entries for About, Feedback and (itch build only) Support.
+- **Help (?)** explains the rules and the controls; the keyboard keys only where there is a keyboard (desktop, and the web build on a computer; not phones or phone browsers — Juan, 2026-11-25). **Settings (⚙)** holds the settings above plus entries for About, Feedback and (itch build only) Support.
 - Android back button closes an open dialog, else asks before leaving. The game pauses (clock stops) when the app goes to the background.
 
 ## Screen sizes

@@ -125,3 +125,35 @@ func test_every_sheet_settles_in_both_languages() -> void:
 			assert_eq(sheet.panel().get_rect(), rect, "%s settles" % code)
 			sheet.close()
 		screen.free()
+
+
+func _help_texts(keyboard: bool) -> String:
+	_saved_game()
+	var screen := _screen()
+	screen.keyboard_override = 1 if keyboard else -1
+	(screen.layout_parts().header.get_child(1) as Button).pressed.emit()
+	var texts := ""
+	for label in _open_sheet_of(screen).find_children("*", "Label", true, false):
+		texts += (label as Label).text + "\n"
+	return texts
+
+
+func test_help_lists_the_keys_where_there_is_a_keyboard() -> void:
+	var texts := _help_texts(true)
+	assert_string_contains(texts, tr("HELP_TEXT"))
+	assert_string_contains(texts, tr("HELP_KEYS"))
+
+
+func test_help_hides_the_keys_on_phones() -> void:
+	var texts := _help_texts(false)
+	assert_string_contains(texts, tr("HELP_TEXT"))
+	assert_false(texts.contains(tr("HELP_KEYS")), texts)
+	assert_false(texts.contains("Ctrl"), texts)
+
+
+func test_keyboard_is_assumed_off_on_mobile_and_mobile_browsers() -> void:
+	assert_false(GameScreen.has_keyboard(PackedStringArray(["mobile"])))
+	assert_false(GameScreen.has_keyboard(PackedStringArray(["web", "web_android"])))
+	assert_false(GameScreen.has_keyboard(PackedStringArray(["web", "web_ios"])))
+	assert_true(GameScreen.has_keyboard(PackedStringArray(["web", "web_macos"])))
+	assert_true(GameScreen.has_keyboard(PackedStringArray(["pc", "macos"])))

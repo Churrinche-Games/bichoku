@@ -29,15 +29,12 @@ HELP_TEXT,"Cada fila, cada columna y cada caja de 3×3 tienen que tener los nuev
 
 Tocá una casilla y después un animal para ponerlo. Con Notas activado, tocá animales para anotar las opciones posibles.
 
-Si un animal se repite, se marca con un círculo rojo. Las pistas son pocas: 3 en Fácil, 2 en Medio y 1 en Difícil. Los mejores tiempos solo cuentan los juegos sin pistas.
-
-En una computadora: 1 a 9, flechas, Borrar, N (notas), U o Ctrl+Z (deshacer), H (pista).","Every row, every column and every 3×3 box must hold all nine animals, with no repeats.
+Si un animal se repite, se marca en rojo. Las pistas son pocas: 3 en Fácil, 2 en Medio y 1 en Difícil. Los mejores tiempos solo cuentan los juegos sin pistas.","Every row, every column and every 3×3 box must hold all nine animals, with no repeats.
 
 Tap a cell, then an animal to place it. With Notes on, tap animals to jot down the possible options.
 
-If an animal repeats, it gets a red ring. Hints are few: 3 on Easy, 2 on Medium and 1 on Hard. Best times only count games solved without hints.
-
-On a computer: 1 to 9, arrows, Backspace, N (notes), U or Ctrl+Z (undo), H (hint)."
+If an animal repeats, it is marked in red. Hints are few: 3 on Easy, 2 on Medium and 1 on Hard. Best times only count games solved without hints."
+HELP_KEYS,"Con teclado: 1 a 9 pone un animal, las flechas mueven la selección, Borrar quita, N activa las notas, U o Ctrl+Z (Cmd+Z en Mac) deshace y H da una pista.","With a keyboard: 1 to 9 places an animal, the arrows move the selection, Backspace erases, N turns notes on, U or Ctrl+Z (Cmd+Z on a Mac) undoes and H gives a hint."
 ANIMAL_YAGUARETE_NAME,Yaguareté,Jaguar
 ANIMAL_YAGUARETE_FACT,El felino más grande de América. En la Argentina sobrevive sobre todo en la selva de Misiones.,The largest cat of the Americas. In Argentina it survives mostly in the Misiones rainforest.
 ANIMAL_LOBO_MARINO_NAME,Lobo marino,South American sea lion

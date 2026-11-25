@@ -28,6 +28,8 @@ const EFFECTS: Array[StringName] = [&"place", &"note", &"clash", &"hint", &"undo
 var store_path := "user://bichoku.json"
 ## Where the About, Feedback and Support pages read the game's facts (tests point elsewhere).
 var info_path := KitGameInfo.PATH
+## Whether the help lists the keyboard keys: 0 asks the platform, 1 yes, -1 no (tests).
+var keyboard_override := 0
 ## The build's store (KitGameInfo.store()) unless a test sets it.
 var store_override := &""
 ## The screen lays out inside the device's safe area; tests set this to pretend a notch.
@@ -491,10 +493,28 @@ func _leave() -> void:
 	quit_handler.call()
 
 
+## Desktops and the web build on a computer have a keyboard; phones and tablets (the app, or
+## the web build in a phone's browser) are taken not to, even if one is plugged in.
+static func has_keyboard(features: PackedStringArray) -> bool:
+	for touch in ["mobile", "web_android", "web_ios"]:
+		if touch in features:
+			return false
+	return true
+
+
 func _show_help() -> void:
 	var sheet := _open_sheet()
 	sheet.add_title(tr("HELP_TITLE"))
 	sheet.add_text(tr("HELP_TEXT"))
+	var keyboard := keyboard_override > 0
+	if keyboard_override == 0:
+		var features := PackedStringArray()
+		for f in ["mobile", "web_android", "web_ios"]:
+			if OS.has_feature(f):
+				features.append(f)
+		keyboard = has_keyboard(features)
+	if keyboard:
+		sheet.add_text(tr("HELP_KEYS"))
 	sheet.add_button(tr("KIT_CLOSE"))
 
 
