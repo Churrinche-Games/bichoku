@@ -23,7 +23,7 @@ const CHROME := HEADER_H + TABS_H + META_H + BUTTON_H * 2 + GAP * 5 + 48.0
 const SAVE_EVERY_TICKS := 10
 const SOUND_ON := preload("res://src/brand/sound-on.svg")
 const SOUND_OFF := preload("res://src/brand/sound-off.svg")
-const EFFECTS: Array[StringName] = [&"place", &"note", &"clash", &"hint", &"undo", &"win"]
+const EFFECTS: Array[StringName] = [&"place", &"note", &"clash", &"hint", &"undo", &"win", &"pop"]
 
 var store_path := "user://bichoku.json"
 ## Where the About, Feedback and Support pages read the game's facts (tests point elsewhere).
@@ -215,6 +215,7 @@ func _apply(next: GameState, effect: StringName = &"") -> void:
 	if state.won and not was_won:
 		sound.play(&"win")
 		_show_win(_store.record_win(state))
+		_launch_fireworks()
 	elif effect:
 		sound.play(effect)
 
@@ -557,6 +558,14 @@ func _toggle_mute() -> void:
 	_store.set_setting("muted", not _settings.muted)
 	_settings = _store.settings()
 	_apply_sound()
+
+
+## Fireworks over everything, the win sheet included; each burst pops.
+func _launch_fireworks() -> void:
+	var show := Fireworks.new(state.seed)
+	show.set_anchors_preset(Control.PRESET_FULL_RECT)
+	show.burst.connect(func(_i: int) -> void: sound.play(&"pop"))
+	add_child(show)
 
 
 func _show_win(new_best: bool) -> void:

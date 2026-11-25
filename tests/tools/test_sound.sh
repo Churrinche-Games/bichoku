@@ -11,7 +11,7 @@ check test_build_is_reproducible 'git -C "$root" diff --quiet -- src/sound && [ 
 report="$(node -e '
 const fs = require("fs");
 const dir = process.argv[1];
-for (const name of ["place", "note", "clash", "hint", "undo", "win", "music"]) {
+for (const name of ["place", "note", "clash", "hint", "undo", "win", "pop", "music"]) {
   const f = `${dir}/${name}.wav`;
   if (!fs.existsSync(f)) { console.log(`${name} missing`); continue; }
   const b = fs.readFileSync(f);

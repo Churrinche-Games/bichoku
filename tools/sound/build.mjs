@@ -32,6 +32,14 @@ const effects = {
   hint: finish(mix(0.3, [[bell(hz(76), 0.14), 0], [bell(hz(79), 0.14), 0.08], [bell(hz(81), 0.14), 0.16]]), 0.5, 0.06),
   // A short falling blip.
   undo: finish(tone({ freq: 520, freqEnd: 340, dur: 0.11, wave: "triangle", gain: 0.5 }), 0.45, 0.04),
+  // A firework: a soft low thump, then a sparse crackle that dies away (one per burst on the win).
+  pop: finish(mix(0.4, [
+    [envelope(tone({ freq: 150, freqEnd: 55, dur: 0.14, gain: 0.8 }), { release: 0.08 }), 0],
+    ...Array.from({ length: 14 }, (_, k) => [
+      envelope(noise({ dur: 0.008, seed: 40 + k, gain: 0.5 * Math.pow(0.86, k) }), { attack: 0.001, release: 0.004 }),
+      0.05 + k * 0.021 + ((k * 7) % 5) * 0.004,
+    ]),
+  ]), 0.55, 0.05),
   // A plucked phrase up the A minor pentatonic.
   win: finish(mix(1.3, [69, 72, 76, 79, 81].map((m, i) => [pluck({ freq: hz(m), dur: 0.7, seed: 10 + i, damping: 0.997 }), i * 0.15])), 0.7, 0.15),
 };

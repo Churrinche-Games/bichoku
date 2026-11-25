@@ -139,7 +139,10 @@ Written in `~/src/game-kit` (generic, tested there), tagged, synced here. Only w
 
 ## Sound
 
-Effects synthesized by a committed script (portfolio Sound section): place an animal, toggle a note, clash, hint, undo, win. Music: one short calm loop, **off by default** (my call: sudoku players often want silence).
+Effects synthesized by a committed script (portfolio Sound section): place an animal, toggle a note, clash, hint, undo, win, and a firework pop. Music: one short calm loop, **on by default** (Juan, 2026-11-25; first my call was off).
+
+- **Mute button** (Juan asked; the design is my call): a speaker next to "?" on the main screen silences music and effects together; tapping it again restores what the Music and Effects switches in Ajustes say. The switches stay for finer choices. The mute is saved.
+- **Win fanfare** (Juan): six bursts of fireworks over the whole screen, the win sheet included, in the brighter animal inks, about 2.4 s; each burst pops. They never take a tap.
 
 ## Store and release
 
