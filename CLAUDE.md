@@ -21,7 +21,7 @@ A small, free, open-source, Argentine-themed game by Churrinche Games, made with
 tools/check.sh   # everything: import, GUT tests, shell tests, lint, format. Must pass before work is done.
 tools/store.sh   # store graphics and screenshots into build/store, then checks them (opens a window;
                  # the check is tests/release/test_store_assets.sh, outside check.sh)
-tools/export.sh web|itch-apk|aab   # builds into build/: itch web zip, itch APK, Play AAB (Gradle;
+tools/export.sh web|itch-apk|aab|aab-release   # builds into build/: itch web zip, itch APK, Play AAB (Gradle;
                  # installs the ignored android/ build template). Needs JDK 17 set in Godot's Editor Settings.
 ```
 
@@ -41,7 +41,9 @@ src/animals/           animals.gd: ids, inks, textures, name/fact translation ke
 src/sound/             effects and music WAVs (generated, committed: tools/sound/build.mjs with the kit's synth)
 src/board/             board_layout.gd (screen-size math), board_view.gd (draws the board)
 src/screen/            game_screen.tscn/.gd (the screen, built in code; help, settings, win, confirm,
-                       leave use the kit's KitSheet; About/Feedback/Support are the kit's KitPages)
+                       leave use the kit's KitSheet; About/Feedback/Support are the kit's KitPages),
+                       fireworks.gd (the win's show)
+src/brand/             icons, feature graphic, the mute button's speakers (generated: tools/art/brand.mjs)
 src/i18n/strings.csv   the game's interface text, es and en; shared KIT_* strings come from the kit.
                        Language: KitLanguage (device default es/en, setting overrides)
 game_info.cfg          name, repo, feedback email, donation links for the kit pages (exported via include_filter)
@@ -56,7 +58,7 @@ addons/churrinche_kit/ the kit (vendored, see Repo)
 addons/gut/            GUT (vendored with the kit)
 export_presets.cfg     Android (Play, feature `play`), Web and Android itch (feature `itch`, the only
                        builds that may show donations); tests, GUT, docs and tools are excluded
-docs/superpowers/      specs/ and plans/ (plans 1–2 done; 3 up to art checkpoint 1; 4 part 1: sound and store texts)
+docs/superpowers/      specs/ and plans/ (plans 1–5 done: the release candidate; what's left is Juan's docs/release-checklist.md)
 ```
 
 - Art and sound are generated: change the scripts and rebuild (`node tools/art/build.mjs`, `node tools/sound/build.mjs`), never edit the outputs; the shell tests fail when outputs and scripts disagree.

@@ -21,7 +21,13 @@
 - Tests: the button mutes music and effects and its icon changes; unmuting restores the switches; the mute is saved and survives a restart; the switches in Ajustes still work while unmuted.
 
 ### P3: fireworks
-- `src/screen/fireworks.gd` (`Fireworks extends Control`): seeded, so tests are deterministic. Six bursts over 1.8 s, each with 28 sparks in one animal's ink; the sparks fly out, fall and fade, and then the node frees itself. It emits `burst(index)`. `MOUSE_FILTER_IGNORE`.
+- `src/screen/fireworks.gd` (`Fireworks extends Control`): seeded, so tests are deterministic. Six bursts 0.28 s apart, each with 36 sparks in one of the six brighter inks; about 2.4 s in all; the sparks fly out, fall and fade, and then the node frees itself. It emits `burst(index)`. `MOUSE_FILTER_IGNORE`.
 - `GameScreen`: on the winning move, after the win sheet, add a `Fireworks` on top. Each burst plays `pop`.
 - `tools/sound/build.mjs`: `pop`, a soft thump and crackle (≤ 0.4 s, peak ≤ 0.8, zero at the ends; the existing sound tests apply).
 - Tests: the winning move adds fireworks above the sheet; they ignore the mouse; they use only the animals' inks; they free themselves after their duration; each burst plays `pop`; muted means no pops.
+
+## As built
+
+- The review found the win sound cut off by the fourth pop (KitSound's round robin): fixed in kit v0.5.3, where a new effect takes the player that frees up first.
+- A new game ends the last show; the show fills the screen (tests).
+- Help keys: on the web a touchscreen counts as no keyboard (iPad Safari reports macOS).

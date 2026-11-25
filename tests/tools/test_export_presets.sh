@@ -20,7 +20,7 @@ itch_block="$(awk '/^\[preset\.2\.options\]/{on=1;next} /^\[preset/{on=0} on' "$
 check test_play_is_a_gradle_aab 'grep -q "^gradle_build/use_gradle_build=true" <<< "$play_block" && grep -q "^gradle_build/export_format=1" <<< "$play_block" && grep -q "^export_path=\"build/android/bichoku.aab\"" "$cfg"'
 check test_itch_apk_without_gradle 'grep -q "^gradle_build/use_gradle_build=false" <<< "$itch_block"'
 # The Android build template is installed by tools/export.sh, never committed.
-check test_build_template_is_ignored 'grep -qx "android/" "$root/.gitignore"'
+check test_build_template_is_ignored 'grep -qx "/android/" "$root/.gitignore"'
 # Both Android presets use the brand icon, never Godot's.
 icons_ok=1
 for key in main_192x192 adaptive_foreground_432x432 adaptive_background_432x432 adaptive_monochrome_432x432; do

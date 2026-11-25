@@ -78,8 +78,9 @@ func test_sparks_fall_and_fade() -> void:
 	var v := Vector2(100, -100)
 	var early := Fireworks.spark_offset(v, 0.2)
 	var late := Fireworks.spark_offset(v, 0.9)
-	# Gravity bends the path down: the late spark is lower than a straight line would put it.
-	assert_gt(late.y, v.y * 0.9)
+	# Gravity bends the path down: below the straight line, and more so as time passes.
+	assert_gt(early.y - v.y * 0.2, 0.0)
+	assert_gt(late.y - v.y * 0.9, early.y - v.y * 0.2)
 	assert_lt(early.y, 0.0)
 	assert_eq(Fireworks.spark_alpha(0.0), 1.0)
 	assert_eq(Fireworks.spark_alpha(Fireworks.SPARK_LIFE), 0.0)
@@ -105,3 +106,16 @@ func test_no_pops_when_muted() -> void:
 	var screen := _win(true)
 	_fireworks_of(screen).advance(Fireworks.length())
 	assert_eq(_played, [] as Array[StringName])
+
+
+func test_a_new_game_ends_the_show() -> void:
+	var screen := _win()
+	var fw := _fireworks_of(screen)
+	_button_in(_open_sheet_of(screen), tr("NEW_GAME")).pressed.emit()
+	assert_true(not is_instance_valid(fw) or fw.is_queued_for_deletion())
+
+
+func test_the_show_fills_the_screen() -> void:
+	var screen := _win()
+	await wait_process_frames(1)
+	assert_eq(_fireworks_of(screen).size, screen.size)

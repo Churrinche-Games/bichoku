@@ -156,4 +156,7 @@ func test_keyboard_is_assumed_off_on_mobile_and_mobile_browsers() -> void:
 	assert_false(GameScreen.has_keyboard(PackedStringArray(["web", "web_android"])))
 	assert_false(GameScreen.has_keyboard(PackedStringArray(["web", "web_ios"])))
 	assert_true(GameScreen.has_keyboard(PackedStringArray(["web", "web_macos"])))
+	# iPad Safari says it is a Mac: on the web, a touchscreen means no keyboard.
+	assert_false(GameScreen.has_keyboard(PackedStringArray(["web", "web_macos"]), true))
+	assert_true(GameScreen.has_keyboard(PackedStringArray(["pc", "windows"]), true))
 	assert_true(GameScreen.has_keyboard(PackedStringArray(["pc", "macos"])))

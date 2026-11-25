@@ -70,6 +70,7 @@ var _notes: Button
 var _hint: Button
 var _sound_button: Button
 var _settings_button: Button
+var _fireworks: Fireworks
 
 
 func _ready() -> void:
@@ -184,6 +185,7 @@ func request_new_game(difficulty: StringName) -> void:
 
 
 func _start(difficulty: StringName) -> void:
+	_end_fireworks()
 	var game := _source.take(difficulty)
 	if game == null:
 		_pending = difficulty
@@ -494,12 +496,13 @@ func _leave() -> void:
 
 
 ## Desktops and the web build on a computer have a keyboard; phones and tablets (the app, or
-## the web build in a phone's browser) are taken not to, even if one is plugged in.
-static func has_keyboard(features: PackedStringArray) -> bool:
+## the web build in a phone's browser) are taken not to, even if one is plugged in. On the web a
+## touchscreen also counts as no keyboard: iPad Safari reports itself as macOS.
+static func has_keyboard(features: PackedStringArray, touchscreen := false) -> bool:
 	for touch in ["mobile", "web_android", "web_ios"]:
 		if touch in features:
 			return false
-	return true
+	return not ("web" in features and touchscreen)
 
 
 func _show_help() -> void:
@@ -509,10 +512,10 @@ func _show_help() -> void:
 	var keyboard := keyboard_override > 0
 	if keyboard_override == 0:
 		var features := PackedStringArray()
-		for f in ["mobile", "web_android", "web_ios"]:
+		for f in ["mobile", "web", "web_android", "web_ios"]:
 			if OS.has_feature(f):
 				features.append(f)
-		keyboard = has_keyboard(features)
+		keyboard = has_keyboard(features, DisplayServer.is_touchscreen_available())
 	if keyboard:
 		sheet.add_text(tr("HELP_KEYS"))
 	sheet.add_button(tr("KIT_CLOSE"))
@@ -582,10 +585,19 @@ func _toggle_mute() -> void:
 
 ## Fireworks over everything, the win sheet included; each burst pops.
 func _launch_fireworks() -> void:
+	_end_fireworks()
 	var show := Fireworks.new(state.seed)
 	show.set_anchors_preset(Control.PRESET_FULL_RECT)
 	show.burst.connect(func(_i: int) -> void: sound.play(&"pop"))
 	add_child(show)
+	_fireworks = show
+
+
+## A new game ends the last one's show.
+func _end_fireworks() -> void:
+	if is_instance_valid(_fireworks):
+		_fireworks.queue_free()
+	_fireworks = null
 
 
 func _show_win(new_best: bool) -> void:

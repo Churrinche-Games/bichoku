@@ -2,7 +2,7 @@
 .godot/
 build/
 # The Android build template: installed by tools/export.sh from the export templates
-android/
+/android/
 
 # Signing: keystores and their passwords never enter the repo
 *.keystore
