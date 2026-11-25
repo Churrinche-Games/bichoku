@@ -103,12 +103,13 @@ func test_effects_off_plays_nothing() -> void:
 	assert_eq(_played, [] as Array[StringName])
 
 
-func test_music_is_loaded_and_off_by_default() -> void:
+func test_music_is_loaded_and_on_by_default() -> void:
+	# Juan, 2026-11-25: music on unless the player turns it off.
 	var screen := _listening_screen()
-	assert_false(screen.sound.music_on)
-	assert_false(screen.sound.is_music_playing())
-	screen.sound.music_on = true
+	assert_true(screen.sound.music_on)
 	assert_true(screen.sound.is_music_playing())
+	screen.sound.music_on = false
+	assert_false(screen.sound.is_music_playing())
 
 
 func test_no_clash_sound_when_clashes_are_hidden() -> void:

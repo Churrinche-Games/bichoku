@@ -124,4 +124,4 @@ func _act(screen: GameScreen, s: GameState, scene: StringName) -> void:
 					screen.palette_button(s.solution[c]).pressed.emit()
 					break
 		&"settings":
-			(screen.layout_parts().header.get_child(2) as Button).pressed.emit()
+			screen.settings_button().pressed.emit()

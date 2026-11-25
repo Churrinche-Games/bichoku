@@ -1,4 +1,10 @@
 ; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
 
 config_version=5
 
@@ -7,8 +13,8 @@ config_version=5
 config/name="Bichoku"
 config/version="0.1.0"
 run/main_scene="res://src/screen/game_screen.tscn"
-config/features=PackedStringArray("4.7", "Mobile")
 config/quit_on_go_back=false
+config/features=PackedStringArray("4.7", "Mobile")
 boot_splash/bg_color=Color(0.94509804, 0.9019608, 0.8392157, 1)
 boot_splash/show_image=false
 config/icon="res://src/brand/icon.svg"
@@ -21,14 +27,12 @@ window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=1
 
-[rendering]
-
-; The engravings are downscaled a lot in board cells: mipmaps keep their shading.
-textures/canvas_textures/default_texture_filter=2
-renderer/rendering_method="mobile"
-textures/vram_compression/import_etc2_astc=true
-
 [internationalization]
 
 locale/translations=PackedStringArray("res://src/i18n/strings.es.translation", "res://src/i18n/strings.en.translation", "res://addons/churrinche_kit/i18n/kit_strings.es.translation", "res://addons/churrinche_kit/i18n/kit_strings.en.translation")
-locale/fallback="en"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=2
+renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true

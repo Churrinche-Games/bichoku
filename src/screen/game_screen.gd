@@ -21,6 +21,8 @@ const BUTTON_H := 96.0
 ## Everything in the column except the board, including gaps and the top and bottom margins.
 const CHROME := HEADER_H + TABS_H + META_H + BUTTON_H * 2 + GAP * 5 + 48.0
 const SAVE_EVERY_TICKS := 10
+const SOUND_ON := preload("res://src/brand/sound-on.svg")
+const SOUND_OFF := preload("res://src/brand/sound-off.svg")
 const EFFECTS: Array[StringName] = [&"place", &"note", &"clash", &"hint", &"undo", &"win"]
 
 var store_path := "user://bichoku.json"
@@ -64,6 +66,8 @@ var _undo: Button
 var _erase: Button
 var _notes: Button
 var _hint: Button
+var _sound_button: Button
+var _settings_button: Button
 
 
 func _ready() -> void:
@@ -78,10 +82,10 @@ func _ready() -> void:
 	for effect in EFFECTS:
 		sound.add_effect(effect, load("res://src/sound/%s.wav" % effect))
 	sound.set_music(load("res://src/sound/music.wav"))
-	_apply_sound()
 	_source = PuzzleSource.new()
 	_source.ready.connect(_on_source_ready)
 	_build()
+	_apply_sound()
 	var timer := Timer.new()
 	timer.wait_time = 1.0
 	timer.timeout.connect(tick_clock)
@@ -127,6 +131,15 @@ func tick_clock() -> void:
 
 func palette_button(digit: int) -> Button:
 	return _palette_buttons[digit - 1]
+
+
+## The speaker next to "?": mutes music and effects together.
+func sound_button() -> Button:
+	return _sound_button
+
+
+func settings_button() -> Button:
+	return _settings_button
 
 
 func tab_button(difficulty: StringName) -> Button:
@@ -224,7 +237,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_apply(Rules.erase(state), &"note")
 	elif key == KEY_N:
 		_set_state(Rules.toggle_notes(state))
-	elif key == KEY_U or (key == KEY_Z and (event as InputEventKey).ctrl_pressed):
+	elif key == KEY_U or (key == KEY_Z and (event.ctrl_pressed or event.meta_pressed)):
 		_apply(Rules.undo(state), &"undo")
 	elif key == KEY_H:
 		_apply(Rules.hint(state), &"hint")
@@ -274,7 +287,12 @@ func _build() -> void:
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_header.add_child(title)
 	_header.add_child(_button("?", _show_help, 72))
-	_header.add_child(_button(tr("SETTINGS_TITLE"), _show_settings))
+	_sound_button = _button("", _toggle_mute, 72)
+	_sound_button.expand_icon = true
+	_sound_button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_header.add_child(_sound_button)
+	_settings_button = _button(tr("SETTINGS_TITLE"), _show_settings)
+	_header.add_child(_settings_button)
 
 	_tabs = _row(TABS_H)
 	for d in Difficulty.ALL:
@@ -332,6 +350,7 @@ func _rebuild() -> void:
 	_palette_buttons.clear()
 	_build()
 	_refresh()
+	_apply_sound()
 	_layout()
 
 
@@ -527,8 +546,17 @@ func _change_setting(value: bool, key: String) -> void:
 
 
 func _apply_sound() -> void:
-	sound.music_on = _settings.music
-	sound.effects_on = _settings.effects
+	sound.music_on = _settings.music and not _settings.muted
+	sound.effects_on = _settings.effects and not _settings.muted
+	if _sound_button != null:
+		_sound_button.icon = SOUND_OFF if _settings.muted else SOUND_ON
+		_sound_button.tooltip_text = tr("SOUND_UNMUTE" if _settings.muted else "SOUND_MUTE")
+
+
+func _toggle_mute() -> void:
+	_store.set_setting("muted", not _settings.muted)
+	_settings = _store.settings()
+	_apply_sound()
 
 
 func _show_win(new_best: bool) -> void:

@@ -84,7 +84,7 @@ func test_feedback_shows_issues_link() -> void:
 func test_sound_settings_default() -> void:
 	_saved_game()
 	var screen := _screen()
-	assert_false(screen.sound.music_on)
+	assert_true(screen.sound.music_on)
 	assert_true(screen.sound.effects_on)
 
 

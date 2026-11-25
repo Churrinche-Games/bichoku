@@ -11,8 +11,9 @@ const DEFAULT_SETTINGS := {
 	"mark_clashes": true,
 	"show_numbers": false,
 	"language": "",
-	"music": false,
+	"music": true,
 	"effects": true,
+	"muted": false,
 }
 
 var _store: SaveStore
@@ -104,8 +105,11 @@ func best_ms(d: StringName) -> int:
 	return _data.best.get(String(d), 0)
 
 
+## The saved settings, with defaults for any key an older save lacks.
 func settings() -> Dictionary:
-	return _data.settings.duplicate()
+	var s := DEFAULT_SETTINGS.duplicate()
+	s.merge(_data.settings, true)
+	return s
 
 
 func set_setting(key: String, value: Variant) -> void:

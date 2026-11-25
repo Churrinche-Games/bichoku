@@ -4,6 +4,7 @@
 //   icon-foreground.svg  Android adaptive icon: the animal inside the 66 dp safe zone, transparent
 //   icon-background.svg  Android adaptive icon: paper and the board's grid
 //   feature.svg          Play feature graphic, 1024×500 (the name is added by render_store.gd)
+//   sound-on.svg, sound-off.svg   the mute button's icons
 //   node tools/art/brand.mjs
 // Reproducible: the same scripts always write byte-identical files.
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -70,4 +71,10 @@ ANIMALS.forEach((a, i) => {
 });
 writeFileSync(join(out, "feature.svg"), svg(1024, 500, featureBody.join("\n")));
 
-console.log("wrote 4 SVGs to src/brand");
+// The mute button's two states: a speaker with sound waves, and the speaker crossed out.
+const speaker = `<path d="M10,25 H21 L34,13 V51 L21,39 H10 Z" fill="${LINE}" stroke="${LINE}" stroke-width="3" stroke-linejoin="round"/>`;
+const stroke = (d) => `<path d="${d}" fill="none" stroke="${LINE}" stroke-width="4.5" stroke-linecap="round"/>`;
+writeFileSync(join(out, "sound-on.svg"), svg(64, 64, [speaker, stroke("M41,24 Q46,32 41,40"), stroke("M47,17 Q57,32 47,47")].join("\n")));
+writeFileSync(join(out, "sound-off.svg"), svg(64, 64, [speaker, stroke("M42,24 L56,40 M56,24 L42,40")].join("\n")));
+
+console.log("wrote 6 SVGs to src/brand");

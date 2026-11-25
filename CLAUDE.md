@@ -66,6 +66,7 @@ docs/superpowers/      specs/ and plans/ (plans 1–2 done; 3 up to art checkpoi
 
 - Code, comments, commit messages and docs in English. Interface text in rioplatense Spanish (voseo) and English.
 - **TDD is the rule:** write a failing test first, watch it fail, then write the minimal code to pass.
+- `project.godot` is rewritten by the Godot editor (comments dropped, keys reordered), so its reasons live here: `default_texture_filter=2` (Linear Mipmap) because the engravings are downscaled a lot in board cells; `boot_splash/show_image=false` so no Godot logo shows; `quit_on_go_back=false` because Back opens the leave sheet.
 - Feature folders in `src/`; tests in `tests/` mirroring them. Pure logic in plain `RefCounted` scripts, out of nodes and scenes.
 - Static typing in GDScript everywhere.
 - Art follows the kit's engraving style (design doc, Art direction; reference `~/src/game-kit/tools/art/engraving-study.html`).

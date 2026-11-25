@@ -54,7 +54,7 @@ func _open_sheet_of(screen: GameScreen) -> KitSheet:
 
 
 func _press_settings(screen: GameScreen) -> KitSheet:
-	(screen.layout_parts().header.get_child(2) as Button).pressed.emit()
+	screen.settings_button().pressed.emit()
 	return _open_sheet_of(screen)
 
 

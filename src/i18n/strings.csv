@@ -19,6 +19,8 @@ WIN_BEST,Mejor tiempo: %s,Best time: %s
 WIN_NEW_BEST,¡Nuevo récord!,New best time!
 WIN_HINTS_NOTE,Los mejores tiempos solo cuentan los juegos resueltos sin pistas.,Best times only count games solved without hints.
 SETTINGS_TITLE,Ajustes,Settings
+SOUND_MUTE,Silenciar,Mute
+SOUND_UNMUTE,Activar sonido,Unmute
 SETTING_ANIMALS_LEFT,Mostrar cuántos animales faltan,Show animals left
 SETTING_MARK_CLASHES,Marcar repetidos,Mark clashes
 SETTING_SHOW_NUMBERS,Mostrar números,Show numbers

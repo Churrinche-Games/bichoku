@@ -93,8 +93,9 @@ func test_settings_defaults_and_changes() -> void:
 			"mark_clashes": true,
 			"show_numbers": false,
 			"language": "",
-			"music": false,
+			"music": true,
 			"effects": true,
+			"muted": false,
 		}
 	)
 	store.set_setting("show_numbers", true)
@@ -126,3 +127,14 @@ func test_wrong_sized_game_is_ignored() -> void:
 	)
 	f.close()
 	assert_null(GameStore.new(PATH).load_game())
+
+
+func test_older_saves_get_new_settings_defaults() -> void:
+	var f := FileAccess.open(PATH, FileAccess.WRITE)
+	f.store_string(
+		JSON.stringify({"version": GameStore.VERSION, "data": {"settings": {"music": false}}})
+	)
+	f.close()
+	var settings := GameStore.new(PATH).settings()
+	assert_false(settings.music, "kept from the save")
+	assert_false(settings.muted, "new key, from the defaults")
