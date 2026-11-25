@@ -53,6 +53,34 @@
 **Files:** `docs/store/listing.es-419.md`, `docs/store/listing.en-US.md` (title ≤ 30 chars, short description ≤ 80, full description ≤ 4000, no donation wording), `docs/privacy-policy.md` (es + en: no data collected, no network access, no accounts, no ads, saves stay on the device, contact = the feedback address placeholder `{{FEEDBACK_EMAIL}}` until Juan has one), `docs/release-checklist.md` (Juan's steps, in order, from the spec's Store and release).
 - [ ] Shell test `tests/tools/test_store_texts.sh`: lengths; no "don", "apoy", "donat", "support the", "Ko-fi", "Cafecito" in the listings; the privacy policy mentions that no data is collected in both languages.
 
-### Part 2 (after art checkpoint 2; separate plan section written then)
+---
 
-Gradle build template and AAB export (debug-signed locally; release keystore is Juan's), itch web + APK builds, store graphics (icon 512, feature graphic 1024×500, screenshots at 720×1280, 1080×2400, 4:3 tablet, 16:9 landscape) in the engraving style, final review.
+## Part 2: release candidate (art checkpoint 2 passed, 2026-11-24)
+
+**Review Focus (part 2):** 1. Godot's default icon or splash anywhere (project icon, boot splash, Android launcher icons, web favicon). 2. Store graphics out of spec (sizes, alpha in the Play icon and feature graphic, which must be opaque). 3. Screenshots that show debug UI, an empty board, or the wrong language. 4. Build outputs or signing material entering the repo. 5. The itch web build needing SharedArrayBuffer (threads off).
+
+### Task R1: the icon and the store graphics
+
+**Files:** `tools/art/brand.mjs` (uses the kit's engraving library and `animals.mjs`): writes `src/brand/icon.svg` (the app icon: the yaguareté on a paper tile with a sliver of the board's grid, opaque), `src/brand/icon-foreground.svg` and `src/brand/icon-background.svg` (Android adaptive icon: the animal inside the 66% safe zone; plain paper), `src/brand/feature.svg` (1024×500: the name "Bichoku" and a row of animals on paper; text as paths is out of reach without a font library, so the feature graphic uses the animals and a drawn 3×3 board, with the name added by the render script with the game's font). `tools/art/render_store.gd` (Godot, headless) rasterizes them to `build/store/icon-512.png`, `build/store/feature-1024x500.png` (both opaque). `project.godot`: `config/icon`, boot splash on paper with the icon, no Godot logo. Android presets: `launcher_icons/main_192x192`, `adaptive_foreground_432x432`, `adaptive_background_432x432`.
+
+- [ ] Tests: `tests/tools/test_art.sh` gains the brand SVGs (reproducible, only paper and inks); GUT `test_brand.gd`: the project icon and the splash are ours, the splash's background is paper, the Godot logo is off; both Android presets point at the brand icons; `render_store.gd` output sizes and no alpha (shell test, renders into a temp dir).
+
+### Task R2: screenshots
+
+**Files:** `tools/shots/screenshots.gd` (headless; GameScreen with a temporary store): scenes — a game in progress (with a selection and notes), the palette's notes mode, the win sheet, the settings sheet — at 720×1280, 1080×2400, 1600×1200 (4:3 tablet, landscape) and 1280×720 (16:9 window), in es and en → `build/store/screenshots/<lang>/<size>-<scene>.png`.
+
+- [ ] Shell test (`test_screenshots.sh`, small sizes only to stay fast): the files exist with the right size; the board area is not empty (pixel variance).
+
+### Task R3: the itch builds
+
+**Files:** `tools/export.sh web|itch-apk` (headless export into `build/`), `docs/release-checklist.md` (commands).
+
+- [ ] Web build: `build/web/index.html`, `.pck`, `.wasm`; no thread support; `game_info.cfg` inside the pack. APK: debug-signed, `build/itch/bichoku.apk`, `aapt`-free check with `unzip -l` (classes.dex, the pack). Run once; not part of `check.sh` (slow).
+
+### Task R4: Gradle and the AAB (asks Juan before the first Gradle download)
+
+- Install the Android build template (`android/` from the export templates; `android/build/` gitignored per Godot's convention or committed — decided then), `gradle_build/use_gradle_build=true`, `gradle_build/export_format=1` (AAB) for the Play preset, debug-signed locally. Release signing is Juan's (checklist).
+
+### Task R5: final review
+
+- Fresh review of part 2; the release checklist names every remaining step that needs Juan.
