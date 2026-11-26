@@ -117,12 +117,13 @@ func set_setting(key: String, value: Variant) -> void:
 	_save()
 
 
-## Starting another game would throw this one away: ask first, unless it's won or nothing was entered.
+## Starting another game would throw this one away: ask first, unless it's won or nothing (no animal,
+## no note) was entered.
 static func needs_confirm_to_discard(s: GameState) -> bool:
 	if s.won:
 		return false
 	for c in s.values.size():
-		if s.values[c] and not s.puzzle[c]:
+		if (s.values[c] and not s.puzzle[c]) or s.notes[c]:
 			return true
 	return false
 

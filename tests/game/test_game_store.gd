@@ -111,6 +111,12 @@ func test_needs_confirm_to_discard() -> void:
 	assert_false(GameStore.needs_confirm_to_discard(s))
 
 
+func test_notes_alone_are_progress_to_keep() -> void:
+	var s := GameState.new_game(Difficulty.EASY, 5)
+	s = Rules.input(Rules.toggle_notes(Rules.select(s, _first_empty(s))), 1)
+	assert_true(GameStore.needs_confirm_to_discard(s))
+
+
 func test_broken_save_starts_fresh() -> void:
 	var f := FileAccess.open(PATH, FileAccess.WRITE)
 	f.store_string("{not json")

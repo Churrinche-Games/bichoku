@@ -168,11 +168,15 @@ func is_confirm_open() -> bool:
 	return _confirm_open
 
 
-## Starts a new game of that difficulty, asking first if it would throw away a game in progress.
+## Starts a new game of that difficulty, asking first if it would throw away a game in progress
+## (animals placed or notes written). An untouched board of the same difficulty stays as it is.
 func request_new_game(difficulty: StringName) -> void:
 	# A click has already toggled the tab; show the current difficulty until a new game starts.
 	_refresh()
-	if state != null and GameStore.needs_confirm_to_discard(state):
+	var progress := state != null and GameStore.needs_confirm_to_discard(state)
+	if state != null and not state.won and not progress and state.difficulty == difficulty:
+		return
+	if progress:
 		_confirm_open = true
 		var sheet := _open_sheet()
 		sheet.add_title(tr("CONFIRM_NEW_TITLE"))

@@ -79,6 +79,7 @@ Same rules as the web version (port `~/src/sudoku/src/features/game/game.ts`):
 - **Clashes:** a cell whose animal repeats in its row, column or box gets a faint red fill and a red ring (Juan, checkpoint 2; the ring keeps it readable without color). Never compares against the solution, and there is no "wrong against the solution" mode in the first release (Juan). Can be turned off.
 - **Hint:** fills the selected cell if it is empty or wrong; otherwise fixes a wrong cell, or else fills the empty cell with the fewest options. Limited per game: Easy 3, Medium 2, Hard 1.
 - **Difficulty** by clue count: Easy stops removing clues at 40, Medium at 32, Hard removes as many as it can (about 24).
+- **Difficulty tabs start a new game.** With progress on the board (an animal placed or a note written) they ask first; an untouched board of the same difficulty stays as it is (Juan, 2026-11-26).
 - **Best time** per difficulty, only for games solved without hints; the win screen says so when hints were used.
 - **Win screen:** time, best time, and a fact about one animal (a different one each game), with that animal's full drawing.
 - **Settings:** animals left (on), mark clashes (on), show numbers (off), language, music and effects (separate on/off toggles, in the settings menu). With "animals left" off, finished animals stay lit in the palette.

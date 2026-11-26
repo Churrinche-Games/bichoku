@@ -76,6 +76,28 @@ func test_new_game_with_progress_asks_first() -> void:
 	assert_eq(screen.state.difficulty, Difficulty.EASY, "not replaced yet")
 
 
+func test_notes_alone_ask_before_a_new_game() -> void:
+	var saved := _saved_game()
+	var screen := _screen()
+	screen.board.cell_pressed.emit(_first_empty(saved))
+	(screen.layout_parts().tools.get_child(2) as Button).pressed.emit()  # Notes
+	screen.palette_button(1).pressed.emit()
+	screen.request_new_game(Difficulty.EASY)
+	assert_true(screen.is_confirm_open())
+	assert_eq(screen.state.puzzle, saved.puzzle, "not replaced yet")
+
+
+func test_same_difficulty_without_moves_keeps_the_board() -> void:
+	var saved := _saved_game()
+	var screen := _screen()
+	var easy := screen.tab_button(Difficulty.EASY)
+	easy.button_pressed = false  # a click on the lit tab unlights it before 'pressed'
+	easy.pressed.emit()
+	assert_false(screen.is_confirm_open())
+	assert_eq(screen.state.puzzle, saved.puzzle, "same board")
+	assert_true(easy.button_pressed, "still lit")
+
+
 func test_buttons_are_big_enough_to_tap() -> void:
 	_saved_game()
 	var viewport: SubViewport = autofree(SubViewport.new())
