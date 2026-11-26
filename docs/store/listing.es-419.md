@@ -20,7 +20,7 @@ Las reglas son las de siempre: cada fila, cada columna y cada caja de 3×3 tiene
 • Pistas limitadas por partida y el mejor tiempo de cada nivel.
 • Deshacer sin límite.
 • Al ganar, un dato sobre uno de los animales.
-• Dibujos grabados, en el estilo de los viejos billetes.
+• Dibujos grabados, en el estilo de los billetes argentinos.
 • Español e inglés. Funciona sin conexión.
 
 Sin anuncios, sin cuentas y sin recopilar datos: la partida se guarda solo en tu teléfono.

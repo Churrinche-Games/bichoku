@@ -20,7 +20,7 @@ The rules are the classic ones: every row, column and 3×3 box holds each of the
 • A few hints per game, and your best time for each level.
 • Unlimited undo.
 • When you win, a fact about one of the animals.
-• Engraved drawings in the style of old banknotes, made by a program.
+• Engraved drawings in the style of Argentine banknotes.
 • Spanish and English. Works offline.
 
 No ads, no accounts and no data collection: your game is saved only on your phone.
